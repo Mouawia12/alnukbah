@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+:root {
+	
+	/* #eb2faf in decimal RGB */
+	--main-color: rgb(235,47,175);
+	
+}
+
+.welcome-one_circle{
+	opacity:0.30;
+	filter: grayscale(100%);
+}

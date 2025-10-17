@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+:root {
+
+	/* #bb54e1 in decimal RGB */
+	--main-color: rgb(187,84,225);
+	
+	/* --color-four: #c90f40; */
+	
+}
+
+.welcome-one_circle{
+	opacity:0.30;
+	filter: grayscale(100%);
+}

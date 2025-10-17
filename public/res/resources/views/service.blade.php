@@ -1,0 +1,102 @@
+@include('include.header')
+<style>
+	.zoomimage {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+}
+
+.zoommiddle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.item {
+  position: relative;
+  width: 50%;
+}
+
+.item:hover .zoomimage {
+  opacity: 0.3;
+}
+
+.item:hover .zoommiddle {
+  opacity: 1;
+}
+
+.zoomtext {
+  background-color: #0e0e0e00;
+  color: rgb(0, 0, 0);
+  font-size: 25px;
+  padding: 16px 32px;
+}
+</style>
+	<!-- Page Title -->
+    <section class="page-title" style="background-image:url({{asset('assets/images/background/page-title_bg.jpg')}})">
+        <div class="auto-container">
+			<h2>{{$servicedetail->name}}</h2>
+			<ul class="bread-crumb clearfix">
+				<li><a href="index.html">الرئيسية</a></li>
+			-	<li>التفاصيل </li>
+			</ul>
+        </div>
+    </section>
+    <!-- End Page Title -->
+
+	<!-- Project Detail -->
+	<section class="project-detail">
+		<div class="auto-container">
+		
+			<div class="middle-box">
+				<p>{{$servicedetail->description }}</p>
+				
+			</div>
+			<div class="service-detail_video">
+				@if ($servicedetail->video!=null && $servicedetail->video!="[]" )
+						
+				@php
+$video=json_decode($servicedetail->video);
+
+@endphp
+			
+
+				<img src="{{asset('assets/images/cover.jpg')}}" alt="" />
+				<a href="{{asset("storage/app/public/".$video[0]->download_link)}}" class="lightbox-video services-one_play"><span class="fa fa-play"><i class="ripple"></i></span></a>
+				@endif	</div>
+			<div class="project-detail_gallery">
+				<div class="row clearfix" id="lightgallery">
+					@if ($servicedetail->images!=null)
+					@php
+	                  $images=json_decode($servicedetail->images);
+                    @endphp
+					
+				
+                     @foreach ($images as $image)
+					<!-- Project Detail Gallery Image -->
+					<div  data-src="{{asset("storage/app/public/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+
+						<img src="{{asset("storage/app/public/".$image)}}" class="zoomimage" alt="" />
+						<div class="zoommiddle">
+							<div class="zoomtext"><span class="fa fa-search"></span></div>
+						  </div>
+					</div>
+					 @endforeach
+							
+					 @endif
+				</div>
+			</div>
+
+			
+
+		</div>
+	</section>
+	<!-- End Project Detail -->
+@include('include.footer')
