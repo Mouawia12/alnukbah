@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\About;
+use App\Support\TextSanitizer;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -45,7 +47,13 @@ class AboutController extends Controller
             $data['image'] = $request->file('image')->storeAs($folder, $filename, 'public');
         }
 
-        $about->fill($data)->save();
+        $about->fill([
+            'text' => TextSanitizer::clean($data['text']),
+            'experiance' => TextSanitizer::clean($data['experiance']),
+            'image' => $data['image'] ?? $about->image,
+        ])->save();
+
+        Cache::forget('front.about');
 
         return redirect()->route('admin.abouts.index')->with('ok', '✅ تم تحديث معلومات "حول الشركة" بنجاح');
     }

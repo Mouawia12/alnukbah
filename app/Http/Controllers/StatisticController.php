@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Statistic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -44,6 +45,8 @@ class StatisticController extends Controller
         }
 
         Statistic::create($data);
+
+        Cache::forget('front.statistics');
 
         return redirect()->route('admin.statistics.index')->with('ok', '✅ تمت إضافة الإحصائيات بنجاح');
     }
@@ -87,6 +90,8 @@ class StatisticController extends Controller
 
         $stat->update($data);
 
+        Cache::forget('front.statistics');
+
         return redirect()->route('admin.statistics.index')->with('ok', '✅ تم تحديث الإحصائيات بنجاح');
     }
 
@@ -102,6 +107,8 @@ class StatisticController extends Controller
         }
 
         $stat->delete();
+
+        Cache::forget('front.statistics');
         return redirect()->route('admin.statistics.index')->with('ok', '🗑️ تم حذف الإحصائيات بنجاح');
     }
 }

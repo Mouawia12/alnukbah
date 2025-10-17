@@ -7,12 +7,19 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\Role;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'avatar', 'settings',
+        'name',
+        'email',
+        'password',
+        'avatar',
+        'settings',
+        'role_id',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -29,23 +36,19 @@ class User extends Authenticatable
         }
     }
 
-    // علاقة belongsTo بين المستخدم والأدوار
-        public function role()
+    public function role()
     {
-        return $this->belongsTo(\App\Models\Role::class, 'role_id');
+        return $this->belongsTo(Role::class);
     }
 
+    public function getMainRoleAttribute(): string
+    {
+        if (!$this->relationLoaded('role')) {
+            $this->load('role');
+        }
 
-
-    public function getMainRoleAttribute()
-{
-    // نحاول نحمّل العلاقة إذا مش محمّلة
-    if (!$this->relationLoaded('roles')) {
-        $this->load('roles');
+        return optional($this->role)->name ?? 'بدون دور';
     }
-
-    return optional($this->roles->first())->name ?? 'بدون دور';
-}
 
 
 }

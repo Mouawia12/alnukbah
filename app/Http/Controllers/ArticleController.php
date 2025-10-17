@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Support\TextSanitizer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -47,10 +49,12 @@ class ArticleController extends Controller
 
         Article::create([
             'title'       => $data['title'],
-            'description' => $data['description'] ?? null,
+            'description' => TextSanitizer::clean($data['description'] ?? null),
             'image'       => $path,
-            'images'      => !empty($galleryPaths) ? json_encode($galleryPaths) : null,
+            'images'      => !empty($galleryPaths) ? $galleryPaths : null,
         ]);
+
+        Cache::forget('front.articles.latest');
 
         return redirect()->route('admin.articles.index')->with('ok', '✅ تمت إضافة المقال بنجاح');
     }
@@ -73,7 +77,9 @@ class ArticleController extends Controller
 
         // ✅ تحديث العنوان والمحتوى
         $article->title = $data['title'];
-        $article->description = $data['description'] ?? $article->description;
+        if (array_key_exists('description', $data)) {
+            $article->description = TextSanitizer::clean($data['description']);
+        }
 
         // ✅ تحديث صورة الغلاف إن تم اختيار واحدة جديدة
         if ($request->hasFile('image')) {
@@ -107,10 +113,12 @@ class ArticleController extends Controller
                 $newGallery[] = $gPath;
             }
 
-            $article->images = json_encode($newGallery);
+            $article->images = $newGallery;
         }
 
         $article->save();
+
+        Cache::forget('front.articles.latest');
 
         return redirect()->route('admin.articles.index')->with('ok', '✅ تم تعديل المقال بنجاح');
     }
@@ -124,7 +132,7 @@ class ArticleController extends Controller
 
         // ✅ حذف صور المعرض
         if ($article->images) {
-            $gallery = json_decode($article->images, true);
+            $gallery = is_array($article->images) ? $article->images : json_decode($article->images, true);
             foreach ($gallery as $img) {
                 if (Storage::disk('public')->exists($img)) {
                     Storage::disk('public')->delete($img);
@@ -133,6 +141,8 @@ class ArticleController extends Controller
         }
 
         $article->delete();
+
+        Cache::forget('front.articles.latest');
 
         return redirect()->route('admin.articles.index')->with('ok', '🗑️ تم حذف المقال');
     }

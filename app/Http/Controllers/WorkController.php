@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Work;
+use App\Support\TextSanitizer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -44,10 +46,12 @@ class WorkController extends Controller
 
         Work::create([
             'title' => $data['title'],
-            'text' => $data['text'] ?? null,
+            'text' => TextSanitizer::clean($data['text'] ?? null),
             'img' => $mainPath,
             'image' => $extraPaths ?: null,
         ]);
+
+        Cache::forget('front.works.latest');
 
         return redirect()->route('admin.works.index')->with('ok', '✅ تمت إضافة العمل بنجاح');
     }
@@ -90,8 +94,10 @@ class WorkController extends Controller
 
         $work->update([
             'title' => $data['title'],
-            'text' => $data['text'] ?? null,
+            'text' => TextSanitizer::clean($data['text'] ?? null),
         ]);
+
+        Cache::forget('front.works.latest');
 
         return redirect()->route('admin.works.index')->with('ok', '✅ تم تحديث بيانات العمل بنجاح');
     }
@@ -113,6 +119,8 @@ class WorkController extends Controller
         }
 
         $work->delete();
+
+        Cache::forget('front.works.latest');
         return redirect()->route('admin.works.index')->with('ok', '🗑️ تم حذف العمل بنجاح');
     }
 }

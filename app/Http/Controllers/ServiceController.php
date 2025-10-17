@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Support\TextSanitizer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -49,10 +51,12 @@ class ServiceController extends Controller
 
         Service::create([
             'name'        => $data['name'],
-            'description' => $data['description'] ?? null,
+            'description' => TextSanitizer::clean($data['description'] ?? null),
             'image'       => $path,
-            'images'      => !empty($extra) ? json_encode($extra) : null,
+            'images'      => !empty($extra) ? $extra : null,
         ]);
+
+        Cache::forget('front.services');
 
         return redirect()->route('admin.services.index')->with('ok', '✅ تمت إضافة الخدمة بنجاح');
     }
@@ -88,16 +92,23 @@ class ServiceController extends Controller
 
         // ✅ تحديث الصور الإضافية
         if ($request->hasFile('images')) {
-            $extra = [];
+            $data['images'] = [];
             foreach ($request->file('images') as $img) {
                 $folder = 'services/' . now()->format('F_Y');
                 $filename = Str::uuid() . '.' . $img->getClientOriginalExtension();
-                $extra[] = $img->storeAs($folder, $filename, 'public');
+                $data['images'][] = $img->storeAs($folder, $filename, 'public');
             }
-            $data['images'] = json_encode($extra);
+        } else {
+            unset($data['images']);
+        }
+
+        if (array_key_exists('description', $data)) {
+            $data['description'] = TextSanitizer::clean($data['description']);
         }
 
         $service->update($data);
+
+        Cache::forget('front.services');
 
         return redirect()->route('admin.services.index')->with('ok', '✅ تم تحديث بيانات الخدمة بنجاح');
     }
@@ -111,8 +122,12 @@ class ServiceController extends Controller
             Storage::disk('public')->delete($service->image);
         }
 
-        if ($service->images) {
-            foreach (json_decode($service->images, true) as $img) {
+        $storedImages = $service->images;
+        if ($storedImages) {
+            $images = is_array($storedImages)
+                ? $storedImages
+                : (json_decode($storedImages, true) ?: []);
+            foreach ($images as $img) {
                 if (Storage::disk('public')->exists($img)) {
                     Storage::disk('public')->delete($img);
                 }
@@ -120,6 +135,8 @@ class ServiceController extends Controller
         }
 
         $service->delete();
+
+        Cache::forget('front.services');
         return redirect()->route('admin.services.index')->with('ok', '🗑️ تم حذف الخدمة بنجاح');
     }
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Subservice;
+
 class Service extends Model
 {
     use HasFactory;
@@ -22,7 +24,7 @@ class Service extends Model
 
     public function subservices()
     {
-        return $this->hasMany(\App\Models\SubService::class);
+        return $this->hasMany(Subservice::class);
     }
 
 }

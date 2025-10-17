@@ -58,6 +58,10 @@
       @endforeach
     </div>
 
+    <div class="d-flex justify-content-center mt-4">
+      {{ $articles->links() }}
+    </div>
+
   </div>
 </section>
 <!-- End News One -->
