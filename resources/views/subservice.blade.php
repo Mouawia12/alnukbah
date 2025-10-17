@@ -85,7 +85,7 @@
                   <div class="image-container">
 
 						<img src="{{asset("storage/app/public/".$image)}}" class="zoomimage" alt="" />
-						  <div class="number-overlay">{{setting('site.phone')}}</div>
+						  <div class="number-overlay">{{app_setting('site.phone')}}</div>
 
 					</div>
 						<div class="zoommiddle">

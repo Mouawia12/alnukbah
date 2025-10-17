@@ -7,7 +7,7 @@
 			<div class="auto-container">
 				<div class="row clearfix">
 					<div class="column col-lg-6 col-md-6 col-sm-12"> 
-						<div class="footer-logo"><a href="index.html"><img src="{{asset("storage/app/public/".setting('site.logo_white'))}}" width="300" alt="" title=""></a></div>
+						<div class="footer-logo"><a href="index.html"><img src="{{asset("storage/app/public/".app_setting('site.logo_white'))}}" width="300" alt="" title=""></a></div>
 					</div>
 					<div class="column col-lg-6 col-md-6 col-sm-12">
 						<!-- Subscribe Box -->
@@ -33,8 +33,8 @@
 					<!-- Footer Column -->
 					<div class="footer-column col-lg-4 col-md-6 col-sm-12">
 						<div class="footer-widget logo-widget">
-							<h5>{{setting('site.title')}}</h5>
-							<p>{{setting('site.description')}} </p>
+							<h5>{{app_setting('site.title')}}</h5>
+							<p>{{app_setting('site.description')}} </p>
 						</div>
 					</div>
 
@@ -69,9 +69,9 @@
 						<div class="footer-widget contact-widget">
 							<h5>اتصل بنا</h5>
 							<ul class="footer-contact_list">
-								<li><span></span>{{setting('site.phone')}}</li>
-								<li><span></span>{{setting('site.email')}}</li>
-								<li><span></span>{{setting('site.location')}}</li>
+								<li><span></span>{{app_setting('site.phone')}}</li>
+								<li><span></span>{{app_setting('site.email')}}</li>
+								<li><span></span>{{app_setting('site.location')}}</li>
 							</ul>
 						</div>
 					</div>
@@ -87,17 +87,17 @@
 					<div class="copyright">جميع الحقوق محفوظة @</div>
 					<!-- Social Box -->
 					<div class="footer_socials">
-						@if (setting('site.facebook')!="")
-						<a href="{{setting('site.facebook')}}"><i class="fa-brands fa-facebook-f"></i></a>
+						@if (app_setting('site.facebook')!="")
+						<a href="{{app_setting('site.facebook')}}"><i class="fa-brands fa-facebook-f"></i></a>
 						@endif 
-						@if (setting('site.twitter')!="")
-						<a href="{{setting('site.twitter')}}"><i class="fa-brands fa-twitter"></i></a>
+						@if (app_setting('site.twitter')!="")
+						<a href="{{app_setting('site.twitter')}}"><i class="fa-brands fa-twitter"></i></a>
 						@endif 
-						@if (setting('site.youtube')!="")
-						<a href="{{setting('site.youtube')}}"><i class="fa-brands fa-youtube"></i></a>
+						@if (app_setting('site.youtube')!="")
+						<a href="{{app_setting('site.youtube')}}"><i class="fa-brands fa-youtube"></i></a>
 						@endif 
-						@if (setting('site.instagram')!="")
-						<a href="{{setting('site.instagram')}}"><i class="fa-brands fa-instagram"></i></a>
+						@if (app_setting('site.instagram')!="")
+						<a href="{{app_setting('site.instagram')}}"><i class="fa-brands fa-instagram"></i></a>
 						@endif
 					</div>
 				</div>
