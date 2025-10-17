@@ -95,7 +95,7 @@ $video=json_decode($servicedetail->video);
 					<div  data-src="{{asset("storage/app/public/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
                         <div class="image-container">
 						<img src="{{asset("storage/app/public/".$image)}}" class="zoomimage" alt="" />
-			       			 <div class="number-overlay">{{setting('site.phone')}}</div>
+			       			 <div class="number-overlay">{{app_setting('site.phone')}}</div>
                          	</div>
 						<div class="zoommiddle">
 							<div class="zoomtext"><span class="fa fa-search"></span></div>

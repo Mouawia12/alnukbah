@@ -17,7 +17,7 @@
 		<!-- Sec Title -->
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+				<img src="{{asset("storage/app/public/".app_setting('site.logo'))}}" alt="" />
 			</div>
 			<div class="sec-title_title">هدفنا الوحيد هو توفير الراحة لعملائنا، وفيما يلي بعض من تعليقاتهم
 			</div>

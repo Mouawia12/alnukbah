@@ -102,12 +102,12 @@
         })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     </script>
 
-    {{ setting('site.analysiscode') }}
+    {{ app_setting('site.analysiscode') }}
     <meta charset="utf-8">
-    <meta name="description" content="{{ setting('site.description') }}">
-    <meta name="keywords" content="{{ setting('site.keywords') }}">
-    <meta name="author" content="{{ setting('site.author') }}">
-    <title>{{ setting('site.title') }}</title>
+    <meta name="description" content="{{ app_setting('site.description') }}">
+    <meta name="keywords" content="{{ app_setting('site.keywords') }}">
+    <meta name="author" content="{{ app_setting('site.author') }}">
+    <title>{{ app_setting('site.title') }}</title>
     <!-- Stylesheets -->
     <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -123,7 +123,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@300;400;500;600;700;800;900&amp;display=swap"
         rel="stylesheet">
     @php
-        $favicon = json_decode(setting('site.favicon'));
+        $favicon = json_decode(app_setting('site.favicon'));
 
     @endphp
 
@@ -338,26 +338,26 @@
                                     <li class="our_list">
                                         <span class="icon"><img src="assets/images/icons/phone.png"
                                                 alt="" /></span>
-                                        <a href="tel: {{ setting('site.phone') }}"> {{ setting('site.phone') }}</a>
+                                        <a href="tel: {{ app_setting('site.phone') }}"> {{ app_setting('site.phone') }}</a>
                                     </li>
                                 </ul>
                                 <!-- Social Box -->
                                 <div class="header_socials">
                                     <span> </span>
-                                    @if (setting('site.facebook') != '')
-                                        <a href="{{ setting('site.facebook') }}"><i
+                                    @if (app_setting('site.facebook') != '')
+                                        <a href="{{ app_setting('site.facebook') }}"><i
                                                 class="fa-brands fa-facebook-f"></i></a>
                                     @endif
-                                    @if (setting('site.twitter') != '')
-                                        <a href="{{ setting('site.twitter') }}"><i
+                                    @if (app_setting('site.twitter') != '')
+                                        <a href="{{ app_setting('site.twitter') }}"><i
                                                 class="fa-brands fa-twitter"></i></a>
                                     @endif
-                                    @if (setting('site.youtube') != '')
-                                        <a href="{{ setting('site.youtube') }}"><i
+                                    @if (app_setting('site.youtube') != '')
+                                        <a href="{{ app_setting('site.youtube') }}"><i
                                                 class="fa-brands fa-youtube"></i></a>
                                     @endif
-                                    @if (setting('site.instagram') != '')
-                                        <a href="{{ setting('site.instagram') }}"><i
+                                    @if (app_setting('site.instagram') != '')
+                                        <a href="{{ app_setting('site.instagram') }}"><i
                                                 class="fa-brands fa-instagram"></i></a>
                                     @endif
                                 </div>
@@ -376,10 +376,10 @@
 
                             <div class="logo-box">
                                 <div class="logo"><a href="{{ route('/') }}"><img
-                                            src="{{ asset('storage/app/public/' . setting('site.logo_white')) }}"
+                                            src="{{ asset('storage/app/public/' . app_setting('site.logo_white')) }}"
                                             alt="" title="" class="marginlogo"></a></div>
                                 <div class="logo-2"><a href="{{ route('/') }}"><img
-                                            src="{{ asset('storage/app/public/' . setting('site.big_logo')) }}"
+                                            src="{{ asset('storage/app/public/' . app_setting('site.big_logo')) }}"
                                             alt="" title="" class="marginlogo2"></a></div>
                             </div>
 
@@ -515,7 +515,7 @@
 
                 <nav class="menu-box">
                     <div class="nav-logo"><a href="{{ route('/') }}"><img
-                                src="{{ asset('storage/app/public/' . setting('site.logo_white')) }}" width="300"
+                                src="{{ asset('storage/app/public/' . app_setting('site.logo_white')) }}" width="300"
                                 alt="" title=""></a></div>
                     <div class="menu-outer">
                         <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header--></div>

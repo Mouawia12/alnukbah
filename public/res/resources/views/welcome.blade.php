@@ -51,9 +51,9 @@
 			<!-- Sec Title -->
 			<div class="sec-title centered">
 				<div class="sec-title_icon">
-					<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+					<img src="{{asset("storage/app/public/".app_setting('site.logo'))}}" alt="" />
 				</div>
-				<h2 class="sec-title_heading">{{setting('site.title')}}  </h2>
+				<h2 class="sec-title_heading">{{app_setting('site.title')}}  </h2>
 			</div>
             <div class="row clearfix">
 				<!-- Column -->
@@ -62,7 +62,7 @@
 						<p>{{$abouts->text}}</p>
 		
 						<div class="welcome-two_author">
-							{{setting('site.author')}} 
+							{{app_setting('site.author')}} 
 						</div>
 						
 					</div>
@@ -125,7 +125,7 @@
 			<!-- Sec Title -->
 			<div class="sec-title centered">
 				<div class="sec-title_icon">
-					<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+					<img src="{{asset("storage/app/public/".app_setting('site.logo'))}}" alt="" />
 				</div>
 				<h2 class="sec-title_heading">خدماتنا</h2>
 			</div>
@@ -255,7 +255,7 @@
 			<!-- Sec Title -->
 			<div class="sec-title centered">
 				<div class="sec-title_icon">
-					<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+					<img src="{{asset("storage/app/public/".app_setting('site.logo'))}}" alt="" />
 				</div>
 			
 				<h2 class="sec-title_heading">مقالات</h2>
@@ -351,7 +351,7 @@
 		<!-- Sec Title -->
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+				<img src="{{asset("storage/app/public/".app_setting('site.logo'))}}" alt="" />
 			</div>
 			<h2 class="sec-title_heading">اعمالنا</h2>
 		</div>
