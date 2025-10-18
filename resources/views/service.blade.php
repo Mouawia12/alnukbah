@@ -79,7 +79,7 @@ $video=json_decode($servicedetail->video);
 			
 
 				<img src="{{asset('assets/images/cover.jpg')}}" alt="" />
-				<a href="{{asset("storage/app/public/".$video[0]->download_link)}}" class="lightbox-video services-one_play"><span class="fa fa-play"><i class="ripple"></i></span></a>
+				<a href="{{asset("storage/".$video[0]->download_link)}}" class="lightbox-video services-one_play"><span class="fa fa-play"><i class="ripple"></i></span></a>
 				@endif	</div>
 			<div class="project-detail_gallery">
 				<div class="row clearfix" id="lightgallery">
@@ -92,10 +92,10 @@ $video=json_decode($servicedetail->video);
                      @foreach ($images as $image)
 					<!-- Project Detail Gallery Image -->
 					
-					<div  data-src="{{asset("storage/app/public/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
                         <div class="image-container">
-						<img src="{{asset("storage/app/public/".$image)}}" class="zoomimage" alt="" />
-			       			 <div class="number-overlay">{{setting('site.phone')}}</div>
+						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
+			       			 <div class="number-overlay">{{app_setting('site.phone')}}</div>
                          	</div>
 						<div class="zoommiddle">
 							<div class="zoomtext"><span class="fa fa-search"></span></div>
@@ -106,9 +106,9 @@ $video=json_decode($servicedetail->video);
 						  @else	
 						     @foreach ($images as $image)
 					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/app/public/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
 
-						<img src="{{asset("storage/app/public/".$image)}}" class="zoomimage" alt="" />
+						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
 						<div class="zoommiddle">
 							<div class="zoomtext"><span class="fa fa-search"></span></div>
 						  </div>

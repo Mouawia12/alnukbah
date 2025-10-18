@@ -19,6 +19,9 @@ use function strtr;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 
+/**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ */
 final class StringMatchesFormatDescription extends RegularExpression
 {
     /**
@@ -30,8 +33,8 @@ final class StringMatchesFormatDescription extends RegularExpression
     {
         parent::__construct(
             $this->createPatternFromFormat(
-                $this->convertNewlines($string)
-            )
+                $this->convertNewlines($string),
+            ),
         );
 
         $this->string = $string;
@@ -46,7 +49,7 @@ final class StringMatchesFormatDescription extends RegularExpression
     protected function matches($other): bool
     {
         return parent::matches(
-            $this->convertNewlines($other)
+            $this->convertNewlines($other),
         );
     }
 
@@ -93,7 +96,7 @@ final class StringMatchesFormatDescription extends RegularExpression
                 '%x' => '[0-9a-fA-F]+',
                 '%f' => '[+-]?\.?\d+\.?\d*(?:[Ee][+-]?\d+)?',
                 '%c' => '.',
-            ]
+            ],
         );
 
         return '/^' . $string . '$/s';

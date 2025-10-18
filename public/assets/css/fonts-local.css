@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('../fonts/Anybody-300.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/Anybody-400.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../fonts/Anybody-500.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('../fonts/Anybody-600.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../fonts/Anybody-700.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url('../fonts/Anybody-800.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Anybody';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('../fonts/Anybody-900.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/Tajawal-400.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('../fonts/Tajawal-500.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('../fonts/Tajawal-700.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url('../fonts/Tajawal-800.ttf') format('truetype');
+}

@@ -43,7 +43,6 @@ use const T_EXIT;
 use const T_EXTENDS;
 use const T_FINAL;
 use const T_FINALLY;
-use const T_FN;
 use const T_FOR;
 use const T_FOREACH;
 use const T_FUNCTION;
@@ -81,6 +80,8 @@ use const T_WHILE;
 use const T_YIELD;
 use const T_YIELD_FROM;
 use function array_key_exists;
+use function array_keys;
+use function array_merge;
 use function array_pop;
 use function array_unique;
 use function constant;
@@ -90,6 +91,9 @@ use function explode;
 use function file_get_contents;
 use function htmlspecialchars;
 use function is_string;
+use function ksort;
+use function range;
+use function sort;
 use function sprintf;
 use function str_replace;
 use function substr;
@@ -97,7 +101,7 @@ use function token_get_all;
 use function trim;
 use PHPUnit\Runner\BaseTestRunner;
 use SebastianBergmann\CodeCoverage\Node\File as FileNode;
-use SebastianBergmann\CodeCoverage\Percentage;
+use SebastianBergmann\CodeCoverage\Util\Percentage;
 use SebastianBergmann\Template\Template;
 
 /**
@@ -130,7 +134,7 @@ final class File extends Renderer
             [
                 'items'     => $this->renderItems($node),
                 'lines'     => $this->renderSourceWithLineCoverage($node),
-                'legend'    => '<p><span class="success"><strong>Executed</strong></span><span class="danger"><strong>Not Executed</strong></span><span class="warning"><strong>Dead Code</strong></span></p>',
+                'legend'    => '<p><span class="legend covered-by-small-tests">Covered by small (and larger) tests</span><span class="legend covered-by-medium-tests">Covered by medium (and large) tests</span><span class="legend covered-by-large-tests">Covered by large tests (and tests of unknown size)</span><span class="legend not-covered">Not covered</span><span class="legend not-coverable">Not coverable</span></p>',
                 'structure' => '',
             ]
         );
@@ -798,8 +802,15 @@ final class File extends Renderer
         $singleLineTemplate = new Template($this->templatePath . 'line.html.dist', '{{', '}}');
 
         $lines = '';
+        $first = true;
 
         foreach ($path['path'] as $branchId) {
+            if ($first) {
+                $first = false;
+            } else {
+                $lines .= '    <tr><td colspan="2">&nbsp;</td></tr>' . "\n";
+            }
+
             $branchLines = range($branches[$branchId]['line_start'], $branches[$branchId]['line_end']);
             sort($branchLines); // sometimes end_line < start_line
 
@@ -835,6 +846,7 @@ final class File extends Renderer
 
                         $popoverContent .= $this->createPopoverContentForTest($test, $testData[$test]);
                     }
+
                     $trClass = $lineCss . ' popin';
                 }
 
@@ -991,43 +1003,44 @@ final class File extends Renderer
 
     private function createPopoverContentForTest(string $test, array $testData): string
     {
-        switch ($testData['status']) {
-            case BaseTestRunner::STATUS_PASSED:
-                switch ($testData['size']) {
-                    case 'small':
-                        $testCSS = ' class="covered-by-small-tests"';
+        $testCSS = '';
 
-                        break;
+        if ($testData['fromTestcase']) {
+            switch ($testData['status']) {
+                case BaseTestRunner::STATUS_PASSED:
+                    switch ($testData['size']) {
+                        case 'small':
+                            $testCSS = ' class="covered-by-small-tests"';
 
-                    case 'medium':
-                        $testCSS = ' class="covered-by-medium-tests"';
+                            break;
 
-                        break;
+                        case 'medium':
+                            $testCSS = ' class="covered-by-medium-tests"';
 
-                    default:
-                        $testCSS = ' class="covered-by-large-tests"';
+                            break;
 
-                        break;
-                }
+                        default:
+                            $testCSS = ' class="covered-by-large-tests"';
 
-                break;
+                            break;
+                    }
 
-            case BaseTestRunner::STATUS_SKIPPED:
-            case BaseTestRunner::STATUS_INCOMPLETE:
-            case BaseTestRunner::STATUS_RISKY:
-            case BaseTestRunner::STATUS_WARNING:
-                $testCSS = ' class="warning"';
+                    break;
 
-                break;
+                case BaseTestRunner::STATUS_SKIPPED:
+                case BaseTestRunner::STATUS_INCOMPLETE:
+                case BaseTestRunner::STATUS_RISKY:
+                case BaseTestRunner::STATUS_WARNING:
+                    $testCSS = ' class="warning"';
 
-            case BaseTestRunner::STATUS_FAILURE:
-            case BaseTestRunner::STATUS_ERROR:
-                $testCSS = ' class="danger"';
+                    break;
 
-                break;
+                case BaseTestRunner::STATUS_FAILURE:
+                case BaseTestRunner::STATUS_ERROR:
+                    $testCSS = ' class="danger"';
 
-            default:
-                $testCSS = '';
+                    break;
+            }
         }
 
         return sprintf(
@@ -1091,7 +1104,6 @@ final class File extends Renderer
             T_EXTENDS       => true,
             T_FINAL         => true,
             T_FINALLY       => true,
-            T_FN            => true,
             T_FOR           => true,
             T_FOREACH       => true,
             T_FUNCTION      => true,
@@ -1129,8 +1141,20 @@ final class File extends Renderer
             T_YIELD_FROM    => true,
         ];
 
+        if (defined('T_FN')) {
+            self::$keywordTokens[constant('T_FN')] = true;
+        }
+
         if (defined('T_MATCH')) {
             self::$keywordTokens[constant('T_MATCH')] = true;
+        }
+
+        if (defined('T_ENUM')) {
+            self::$keywordTokens[constant('T_ENUM')] = true;
+        }
+
+        if (defined('T_READONLY')) {
+            self::$keywordTokens[constant('T_READONLY')] = true;
         }
 
         return self::$keywordTokens;

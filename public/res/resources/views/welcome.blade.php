@@ -1,5 +1,8 @@
 @include('include.header')
 
+@php
+    $siteLogo = app_setting('site.logo');
+@endphp
 
 	<!-- Slider One -->
 	<section class="slider-one">
@@ -22,7 +25,7 @@
 								
 								</div>
 								<div class="column col-lg-9 col-md-12 col-sm-12">
-									<div class="slider-one_image"><img src="{{ asset("storage/app/public/".$slider->img) }}" alt="" /></div>
+									<div class="slider-one_image"><img src="{{ asset("storage/".$slider->img) }}" alt="" /></div>
 								</div>
 							</div>
 						</div>
@@ -51,9 +54,9 @@
 			<!-- Sec Title -->
 			<div class="sec-title centered">
 				<div class="sec-title_icon">
-					<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+					<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="" />
 				</div>
-				<h2 class="sec-title_heading">{{setting('site.title')}}  </h2>
+				<h2 class="sec-title_heading">{{app_setting('site.title')}}  </h2>
 			</div>
             <div class="row clearfix">
 				<!-- Column -->
@@ -62,7 +65,7 @@
 						<p>{{$abouts->text}}</p>
 		
 						<div class="welcome-two_author">
-							{{setting('site.author')}} 
+							{{app_setting('site.author')}} 
 						</div>
 						
 					</div>
@@ -71,7 +74,7 @@
 				<div class="welcome-two_image-column col-lg-7 col-md-12 col-sm-12">
 					<div class="welcome-two_image-outer">
 						<div class="welcome-two_image skewElem">
-							<img src="{{ asset("storage/app/public/".$abouts->image) }}" alt="" />
+							<img src="{{ asset("storage/".$abouts->image) }}" alt="" />
 						</div>
 						<div class="welcome-two_experiance" data-parallax='{"y" : 40}'>
 							<img src="assets/images/resource/welcome-4.jpg" alt="" />
@@ -125,7 +128,7 @@
 			<!-- Sec Title -->
 			<div class="sec-title centered">
 				<div class="sec-title_icon">
-					<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+					<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="" />
 				</div>
 				<h2 class="sec-title_heading">خدماتنا</h2>
 			</div>
@@ -137,7 +140,7 @@
 				<div class="project-block_one col-lg-4 col-md-6 col-sm-12">
 					<div class="project-block_one-inner wow fadeInRight" data-wow-delay="300ms" data-wow-duration="1500ms">
 						<div class="project-block_one-image">
-							<a href="{{ route('service',['id'=>$service->id]) }}"><img src="{{asset("storage/app/public/".$service->image)}}" alt="" /></a>
+							<a href="{{ route('service',['id'=>$service->id]) }}"><img src="{{asset("storage/".$service->image)}}" alt="" /></a>
 						</div>
 						<div class="project-block_one-content">
 							<h3 class="project-block_one-heading"><a href="{{ route('service',['id'=>$service->id]) }}">{{$service->name}}</a></h3>
@@ -235,10 +238,10 @@
 					<div class="progress-one_images-outer wow fadeInRight" data-wow-delay="300ms" data-wow-duration="1500ms">
 						<div class="row clearfix">
 							<div class="progress-one_image skewElem col-lg-6 col-md-6 col-sm-6">
-								<img src="{{asset("storage/app/public/".$statistics->img1)}}" alt="" />
+								<img src="{{asset("storage/".$statistics->img1)}}" alt="" />
 							</div>
 							<div class="progress-one_image skewElem col-lg-6 col-md-6 col-sm-6">
-								<img src="{{asset("storage/app/public/".$statistics->img2)}}" alt="" />
+								<img src="{{asset("storage/".$statistics->img2)}}" alt="" />
 							</div>
 						</div>
 					</div>
@@ -255,7 +258,7 @@
 			<!-- Sec Title -->
 			<div class="sec-title centered">
 				<div class="sec-title_icon">
-					<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+					<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="" />
 				</div>
 			
 				<h2 class="sec-title_heading">مقالات</h2>
@@ -271,7 +274,7 @@
 				<div class="news-block_one col-lg-4 col-md-6 col-sm-12">
 					<div class="news-block_one-inner wow fadeInRight" data-wow-delay="300ms" data-wow-duration="1500ms">
 						<div class="news-block_one-image">
-							<a href="{{ route('article',['id'=>$article->id]) }}"><img src="{{asset("storage/app/public/".$article->image)}}" alt="" /></a>
+							<a href="{{ route('article',['id'=>$article->id]) }}"><img src="{{asset("storage/".$article->image)}}" alt="" /></a>
 						</div>
 						<div class="news-block_one-content" style="margin-top: 20px;margin-right:5px
                     ">
@@ -351,7 +354,7 @@
 		<!-- Sec Title -->
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+				<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="" />
 			</div>
 			<h2 class="sec-title_heading">اعمالنا</h2>
 		</div>
@@ -366,7 +369,7 @@
 				<div class="project-block_one col-lg-4 col-md-6 col-sm-12" style="width: 100%;">
 					<div class="project-block_one-inner wow fadeInRight" data-wow-delay="300ms" data-wow-duration="700ms">
 						<div class="project-block_one-image">
-							<a href="{{ route('work',['id'=>$work->id]) }}"><img src="{{asset("storage/app/public/".$work->img)}}" alt="" /></a>
+							<a href="{{ route('work',['id'=>$work->id]) }}"><img src="{{asset("storage/".$work->img)}}" alt="" /></a>
 						</div>
 						<div class="project-block_one-content">
 							<h3 class="project-block_one-heading"><a href="{{ route('work',['id'=>$work->id]) }}">{{$work->title}}</a></h3>

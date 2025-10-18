@@ -1,5 +1,9 @@
 @include('include.header')
 
+@php
+    $siteLogo = app_setting('site.logo');
+@endphp
+
 	<!-- Page Title -->
     <section class="page-title" style="background-image:url({{asset('assets/images/background/page-title_bg.jpg')}})">
         <div class="auto-container">
@@ -17,7 +21,7 @@
 		<!-- Sec Title -->
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{asset("storage/app/public/".setting('site.logo'))}}" alt="" />
+				<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="" />
 			</div>
 			<div class="sec-title_title">هدفنا الوحيد هو توفير الراحة لعملائنا، وفيما يلي بعض من تعليقاتهم
 			</div>
@@ -34,7 +38,7 @@
 			<div class="news-block_one col-lg-4 col-md-6 col-sm-12">
 				<div class="news-block_one-inner wow fadeInRight" data-wow-delay="300ms" data-wow-duration="1500ms">
 					<div class="news-block_one-image">
-						<a href="{{ route('article',['id'=>$article->id]) }}"><img src="{{asset("storage/app/public/".$article->image)}}" alt="" /></a>
+						<a href="{{ route('article',['id'=>$article->id]) }}"><img src="{{asset("storage/".$article->image)}}" alt="" /></a>
 					</div>
 					<div class="news-block_one-content" style="margin-top: 20px;margin-right:5px
 				">

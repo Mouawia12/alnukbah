@@ -37,7 +37,7 @@
 					<div class="contact-info-block_inner">
 						<span class="contact-info-block_icon fa-solid fa-location-dot fa-fw"></span>
 						<h4 class="contact-info-block_heading">العنوان</h4>
-						<div class="contact-info-block_text">{{setting('site.location')}}</div>
+						<div class="contact-info-block_text">{{app_setting('site.location')}}</div>
 					</div>
 				</div>
 				
@@ -46,7 +46,7 @@
 					<div class="contact-info-block_inner">
 						<span class="contact-info-block_icon fa-solid fa-envelope"></span>
 						<h4 class="contact-info-block_heading">البريد الالكتروني</h4>
-						<div class="contact-info-block_text"><a href="mailto:{{setting('site.email')}}">{{setting('site.email')}}</a></div>
+						<div class="contact-info-block_text"><a href="mailto:{{app_setting('site.email')}}">{{app_setting('site.email')}}</a></div>
 					</div>
 				</div>
 				
@@ -55,7 +55,7 @@
 					<div class="contact-info-block_inner">
 						<span class="contact-info-block_icon fa-solid fa-clock fa-fw"></span>
 						<h4 class="contact-info-block_heading"> اوقات العمل</h4>
-						<div class="contact-info-block_text">{{setting('site.worktime')}}</div>
+						<div class="contact-info-block_text">{{app_setting('site.worktime')}}</div>
 					</div>
 				</div>
 				
@@ -64,7 +64,7 @@
 					<div class="contact-info-block_inner">
 						<span class="contact-info-block_icon fa-solid fa-phone fa-fw"></span>
 						<h4 class="contact-info-block_heading">رقم الهاتف</h4>
-						<div class="contact-info-block_text"><a href="tel:{{setting('site.phone')}}">{{setting('site.phone')}}</a></div>
+						<div class="contact-info-block_text"><a href="tel:{{app_setting('site.phone')}}">{{app_setting('site.phone')}}</a></div>
 					</div>
 				</div>
 				

@@ -8,7 +8,10 @@ use Illuminate\Database\Connection;
 use Illuminate\Database\ConnectionResolverInterface;
 use Illuminate\Database\Events\SchemaDumped;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Config;
+use Symfony\Component\Console\Attribute\AsCommand;
 
+#[AsCommand(name: 'schema:dump')]
 class DumpCommand extends Command
 {
     /**
@@ -22,6 +25,17 @@ class DumpCommand extends Command
                 {--prune : Delete all existing migration files}';
 
     /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'schema:dump';
+
+    /**
      * The console command description.
      *
      * @var string
@@ -31,25 +45,31 @@ class DumpCommand extends Command
     /**
      * Execute the console command.
      *
+     * @param  \Illuminate\Database\ConnectionResolverInterface  $connections
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $dispatcher
      * @return int
      */
     public function handle(ConnectionResolverInterface $connections, Dispatcher $dispatcher)
     {
-        $this->schemaState(
-            $connection = $connections->connection($database = $this->input->getOption('database'))
-        )->dump($path = $this->path($connection));
+        $connection = $connections->connection($database = $this->input->getOption('database'));
+
+        $this->schemaState($connection)->dump(
+            $connection, $path = $this->path($connection)
+        );
 
         $dispatcher->dispatch(new SchemaDumped($connection, $path));
 
-        $this->info('Database schema dumped successfully.');
+        $info = 'Database schema dumped';
 
         if ($this->option('prune')) {
             (new Filesystem)->deleteDirectory(
                 database_path('migrations'), $preserve = false
             );
 
-            $this->info('Migrations pruned successfully.');
+            $info .= ' and pruned';
         }
+
+        $this->components->info($info.' successfully.');
     }
 
     /**
@@ -61,6 +81,7 @@ class DumpCommand extends Command
     protected function schemaState(Connection $connection)
     {
         return $connection->getSchemaState()
+                ->withMigrationTable($connection->getTablePrefix().Config::get('database.migrations', 'migrations'))
                 ->handleOutputUsing(function ($type, $buffer) {
                     $this->output->write($buffer);
                 });

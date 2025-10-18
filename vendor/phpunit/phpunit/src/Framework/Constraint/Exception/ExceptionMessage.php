@@ -13,6 +13,9 @@ use function sprintf;
 use function strpos;
 use Throwable;
 
+/**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ */
 final class ExceptionMessage extends Constraint
 {
     /**
@@ -62,14 +65,14 @@ final class ExceptionMessage extends Constraint
         if ($this->expectedMessage === '') {
             return sprintf(
                 "exception message is empty but is '%s'",
-                $other->getMessage()
+                $other->getMessage(),
             );
         }
 
         return sprintf(
             "exception message '%s' contains '%s'",
             $other->getMessage(),
-            $this->expectedMessage
+            $this->expectedMessage,
         );
     }
 }

@@ -15,10 +15,9 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * Constraint that asserts that the class it is evaluated for has a given
- * static attribute.
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
- * The attribute name is passed in the constructor.
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4601
  */
 final class ClassHasStaticAttribute extends ClassHasAttribute
 {
@@ -29,7 +28,7 @@ final class ClassHasStaticAttribute extends ClassHasAttribute
     {
         return sprintf(
             'has static attribute "%s"',
-            $this->attributeName()
+            $this->attributeName(),
         );
     }
 
@@ -51,8 +50,8 @@ final class ClassHasStaticAttribute extends ClassHasAttribute
         } catch (ReflectionException $e) {
             throw new Exception(
                 $e->getMessage(),
-                (int) $e->getCode(),
-                $e
+                $e->getCode(),
+                $e,
             );
         }
         // @codeCoverageIgnoreEnd

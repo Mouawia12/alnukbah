@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2020 Justin Hileman
+ * (c) 2012-2023 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 class ConstantEnumerator extends Enumerator
 {
     // Because `Json` is ugly.
-    private static $categoryLabels = [
+    private const CATEGORY_LABELS = [
         'libxml'   => 'libxml',
         'openssl'  => 'OpenSSL',
         'pcre'     => 'PCRE',
@@ -49,7 +49,7 @@ class ConstantEnumerator extends Enumerator
     /**
      * {@inheritdoc}
      */
-    protected function listItems(InputInterface $input, \Reflector $reflector = null, $target = null)
+    protected function listItems(InputInterface $input, ?\Reflector $reflector = null, $target = null): array
     {
         // if we have a reflector, ensure that it's a namespace reflector
         if (($target !== null || $reflector !== null) && !$reflector instanceof ReflectionNamespace) {
@@ -61,7 +61,7 @@ class ConstantEnumerator extends Enumerator
             return [];
         }
 
-        $user     = $input->getOption('user');
+        $user = $input->getOption('user');
         $internal = $input->getOption('internal');
         $category = $input->getOption('category');
 
@@ -88,8 +88,8 @@ class ConstantEnumerator extends Enumerator
         }
 
         if ($category) {
-            $caseCategory = \array_key_exists($category, self::$categoryLabels) ? self::$categoryLabels[$category] : \ucfirst($category);
-            $label = $caseCategory . ' Constants';
+            $caseCategory = \array_key_exists($category, self::CATEGORY_LABELS) ? self::CATEGORY_LABELS[$category] : \ucfirst($category);
+            $label = $caseCategory.' Constants';
             $ret[$label] = $this->getConstants($category);
         }
 
@@ -98,7 +98,7 @@ class ConstantEnumerator extends Enumerator
         }
 
         if ($reflector !== null) {
-            $prefix = \strtolower($reflector->getName()) . '\\';
+            $prefix = \strtolower($reflector->getName()).'\\';
 
             foreach ($ret as $key => $names) {
                 foreach (\array_keys($names) as $name) {
@@ -122,7 +122,7 @@ class ConstantEnumerator extends Enumerator
      *
      * @return array
      */
-    protected function getConstants($category = null)
+    protected function getConstants(?string $category = null): array
     {
         if (!$category) {
             return \get_defined_constants();
@@ -133,7 +133,7 @@ class ConstantEnumerator extends Enumerator
         if ($category === 'internal') {
             unset($consts['user']);
 
-            return \call_user_func_array('array_merge', $consts);
+            return \array_merge(...\array_values($consts));
         }
 
         foreach ($consts as $key => $value) {
@@ -152,7 +152,7 @@ class ConstantEnumerator extends Enumerator
      *
      * @return array
      */
-    protected function prepareConstants(array $constants)
+    protected function prepareConstants(array $constants): array
     {
         // My kingdom for a generator.
         $ret = [];

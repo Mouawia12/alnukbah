@@ -17,10 +17,9 @@ use ReflectionClass;
 use ReflectionException;
 
 /**
- * Constraint that asserts that the class it is evaluated for has a given
- * attribute.
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
- * The attribute name is passed in the constructor.
+ * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4601
  */
 class ClassHasAttribute extends Constraint
 {
@@ -41,7 +40,7 @@ class ClassHasAttribute extends Constraint
     {
         return sprintf(
             'has attribute "%s"',
-            $this->attributeName
+            $this->attributeName,
         );
     }
 
@@ -59,8 +58,8 @@ class ClassHasAttribute extends Constraint
         } catch (ReflectionException $e) {
             throw new Exception(
                 $e->getMessage(),
-                (int) $e->getCode(),
-                $e
+                $e->getCode(),
+                $e,
             );
         }
         // @codeCoverageIgnoreEnd
@@ -80,7 +79,7 @@ class ClassHasAttribute extends Constraint
             '%sclass "%s" %s',
             is_object($other) ? 'object of ' : '',
             is_object($other) ? get_class($other) : $other,
-            $this->toString()
+            $this->toString(),
         );
     }
 

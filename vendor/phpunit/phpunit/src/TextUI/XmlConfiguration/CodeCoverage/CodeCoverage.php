@@ -12,6 +12,7 @@ namespace PHPUnit\TextUI\XmlConfiguration\CodeCoverage;
 use function count;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Filter\DirectoryCollection;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Clover;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Cobertura;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Crap4j;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Html;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
@@ -23,6 +24,7 @@ use PHPUnit\TextUI\XmlConfiguration\FileCollection;
 
 /**
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ *
  * @psalm-immutable
  */
 final class CodeCoverage
@@ -83,6 +85,11 @@ final class CodeCoverage
     private $clover;
 
     /**
+     * @var ?Cobertura
+     */
+    private $cobertura;
+
+    /**
      * @var ?Crap4j
      */
     private $crap4j;
@@ -107,7 +114,7 @@ final class CodeCoverage
      */
     private $xml;
 
-    public function __construct(?Directory $cacheDirectory, DirectoryCollection $directories, FileCollection $files, DirectoryCollection $excludeDirectories, FileCollection $excludeFiles, bool $pathCoverage, bool $includeUncoveredFiles, bool $processUncoveredFiles, bool $ignoreDeprecatedCodeUnits, bool $disableCodeCoverageIgnore, ?Clover $clover, ?Crap4j $crap4j, ?Html $html, ?Php $php, ?Text $text, ?Xml $xml)
+    public function __construct(?Directory $cacheDirectory, DirectoryCollection $directories, FileCollection $files, DirectoryCollection $excludeDirectories, FileCollection $excludeFiles, bool $pathCoverage, bool $includeUncoveredFiles, bool $processUncoveredFiles, bool $ignoreDeprecatedCodeUnits, bool $disableCodeCoverageIgnore, ?Clover $clover, ?Cobertura $cobertura, ?Crap4j $crap4j, ?Html $html, ?Php $php, ?Text $text, ?Xml $xml)
     {
         $this->cacheDirectory            = $cacheDirectory;
         $this->directories               = $directories;
@@ -120,6 +127,7 @@ final class CodeCoverage
         $this->ignoreDeprecatedCodeUnits = $ignoreDeprecatedCodeUnits;
         $this->disableCodeCoverageIgnore = $disableCodeCoverageIgnore;
         $this->clover                    = $clover;
+        $this->cobertura                 = $cobertura;
         $this->crap4j                    = $crap4j;
         $this->html                      = $html;
         $this->php                       = $php;
@@ -142,7 +150,7 @@ final class CodeCoverage
     {
         if (!$this->hasCacheDirectory()) {
             throw new Exception(
-                'No cache directory has been configured'
+                'No cache directory has been configured',
             );
         }
 
@@ -214,11 +222,33 @@ final class CodeCoverage
     {
         if (!$this->hasClover()) {
             throw new Exception(
-                'Code Coverage report "Clover XML" has not been configured'
+                'Code Coverage report "Clover XML" has not been configured',
             );
         }
 
         return $this->clover;
+    }
+
+    /**
+     * @psalm-assert-if-true !null $this->cobertura
+     */
+    public function hasCobertura(): bool
+    {
+        return $this->cobertura !== null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function cobertura(): Cobertura
+    {
+        if (!$this->hasCobertura()) {
+            throw new Exception(
+                'Code Coverage report "Cobertura XML" has not been configured',
+            );
+        }
+
+        return $this->cobertura;
     }
 
     /**
@@ -236,7 +266,7 @@ final class CodeCoverage
     {
         if (!$this->hasCrap4j()) {
             throw new Exception(
-                'Code Coverage report "Crap4J" has not been configured'
+                'Code Coverage report "Crap4J" has not been configured',
             );
         }
 
@@ -258,7 +288,7 @@ final class CodeCoverage
     {
         if (!$this->hasHtml()) {
             throw new Exception(
-                'Code Coverage report "HTML" has not been configured'
+                'Code Coverage report "HTML" has not been configured',
             );
         }
 
@@ -280,7 +310,7 @@ final class CodeCoverage
     {
         if (!$this->hasPhp()) {
             throw new Exception(
-                'Code Coverage report "PHP" has not been configured'
+                'Code Coverage report "PHP" has not been configured',
             );
         }
 
@@ -302,7 +332,7 @@ final class CodeCoverage
     {
         if (!$this->hasText()) {
             throw new Exception(
-                'Code Coverage report "Text" has not been configured'
+                'Code Coverage report "Text" has not been configured',
             );
         }
 
@@ -324,7 +354,7 @@ final class CodeCoverage
     {
         if (!$this->hasXml()) {
             throw new Exception(
-                'Code Coverage report "XML" has not been configured'
+                'Code Coverage report "XML" has not been configured',
             );
         }
 

@@ -1,5 +1,9 @@
 @include('include.header')
 
+@php
+    $siteLogo = app_setting('site.logo');
+@endphp
+
 <!-- Slider One -->
 <section class="slider-one">
 	<div class="main-slider swiper-container">
@@ -7,7 +11,8 @@
 			@foreach ($sliders as $slider)
 			<!-- Slide -->
 			<div class="swiper-slide">
-				<div class="slider-one_image-layer" style="background-image:url(assets/images/main-slider/1.jpg)"></div>
+				<div class="slider-one_image-layer"
+					style="background-image:url('{{ asset('assets/images/main-slider/1.jpg') }}')"></div>
 				<div class="auto-container">
 					<div class="upper-box d-flex justify-content-between align-items-center flex-wrap">
 						<h2 class="slider-one_heading">{{ $slider->title }}</h2>
@@ -30,8 +35,10 @@
 		</div>
 
 		<div class="slider-one-arrow">
-			<div class="main-slider-prev"><img src="assets/images/main-slider/slider-next_arrow.png" alt="" /></div>
-			<div class="main-slider-next"><img src="assets/images/main-slider/slider-prev_arrow.png" alt="" /></div>
+			<div class="main-slider-prev"><img src="{{ asset('assets/images/main-slider/slider-next_arrow.png') }}" alt="" />
+			</div>
+			<div class="main-slider-next"><img src="{{ asset('assets/images/main-slider/slider-prev_arrow.png') }}" alt="" />
+			</div>
 			<div class="main-slider_pagination"></div>
 		</div>
 	</div>
@@ -44,7 +51,7 @@
 	<div class="auto-container">
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{ asset('storage/logo.png') }}" alt="Logo" />
+				<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="Logo" />
 			</div>
 			<h2 class="sec-title_heading">{{ config('app.name', 'النخبة الحديثة للمقاولات العامة') }}</h2>
 		</div>
@@ -70,7 +77,8 @@
 
 <!-- Progress One -->
 <section class="progress-one">
-	<div class="progress-one_image-layer2" style="background-image:url(assets/images/background/progress-one_bg.jpg)"></div>
+	<div class="progress-one_image-layer2"
+		style="background-image:url('{{ asset('assets/images/background/progress-one_bg.jpg') }}')"></div>
 	<div class="auto-container">
 		<div class="row clearfix">
 			<div class="progress-one_content-column col-lg-12 col-md-12 col-sm-12">
@@ -95,7 +103,7 @@
 	<div class="auto-container">
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{ asset('storage/logo.png') }}" alt="Logo" />
+				<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="Logo" />
 			</div>
 			<h2 class="sec-title_heading">خدماتنا</h2>
 		</div>
@@ -124,7 +132,8 @@
 
 <!-- Progress One -->
 <section class="progress-one">
-	<div class="progress-one_image-layer" style="background-image:url(assets/images/background/progress-one_bg.jpg)"></div>
+	<div class="progress-one_image-layer"
+		style="background-image:url('{{ asset('assets/images/background/progress-one_bg.jpg') }}')"></div>
 	<div class="auto-container">
 		<div class="row clearfix">
 			<div class="progress-one_content-column col-lg-6 col-md-12 col-sm-12">
@@ -210,7 +219,7 @@
 	<div class="auto-container">
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{ asset('storage/logo.png') }}" alt="Logo" />
+				<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="Logo" />
 			</div>
 			<h2 class="sec-title_heading">مقالات</h2>
 		</div>
@@ -249,7 +258,8 @@
 
 <!-- CTA One -->
 <section class="cta-one">
-	<div class="cta-one_pattern-layer" style="background-image:url(assets/images/background/cta-one_bg.png)"></div>
+	<div class="cta-one_pattern-layer"
+		style="background-image:url('{{ asset('assets/images/background/cta-one_bg.png') }}')"></div>
 	<div class="auto-container">
 		<h1 class="cta-one_heading">اتصل بنا</h1>
 		<div class="cta-one_text">احصل على حلول مبتكرة واقتصادية للمظلات والسواتر تناسب ميزانيتك وتوفر لك الراحة والأناقة</div>
@@ -268,7 +278,7 @@
 	<div class="auto-container">
 		<div class="sec-title centered">
 			<div class="sec-title_icon">
-				<img src="{{ asset('storage/logo.png') }}" alt="Logo" />
+				<img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}" alt="Logo" />
 			</div>
 			<h2 class="sec-title_heading">اعمالنا</h2>
 		</div>
@@ -296,8 +306,10 @@
 			</div>
 
 			<div class="services-two_arrow">
-				<div class="services-two_slider-prev"><img src="assets/images/icons/client-one_next-arrow.png" alt="" /></div>
-				<div class="services-two_slider-next"><img src="assets/images/icons/client-one_prev-arrow.png" alt="" /></div>
+				<div class="services-two_slider-prev"><img src="{{ asset('assets/images/icons/client-one_next-arrow.png') }}"
+						alt="" /></div>
+				<div class="services-two_slider-next"><img src="{{ asset('assets/images/icons/client-one_prev-arrow.png') }}"
+						alt="" /></div>
 			</div>
 		</div>
 	</div>

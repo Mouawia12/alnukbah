@@ -42,7 +42,7 @@ final class FileLoader
             $includePathFilename === $localFile ||
             !self::isReadable($includePathFilename)) {
             throw new Exception(
-                sprintf('Cannot open file "%s".' . "\n", $filename)
+                sprintf('Cannot open file "%s".' . "\n", $filename),
             );
         }
 
@@ -58,6 +58,11 @@ final class FileLoader
     {
         $oldVariableNames = array_keys(get_defined_vars());
 
+        /**
+         * @noinspection PhpIncludeInspection
+         *
+         * @psalm-suppress UnresolvableInclude
+         */
         include_once $filename;
 
         $newVariables = get_defined_vars();

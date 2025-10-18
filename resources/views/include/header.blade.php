@@ -1,113 +1,110 @@
 <!DOCTYPE html>
-<script>
-    gtag('event', 'conversion_event_contact', {
-        // <event_parameters>
-    });
-</script>
 
 <html>
 
 <head>
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSXL9YL6V4"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+    @unless (app()->environment('local'))
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-YSXL9YL6V4"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
 
-        gtag('config', 'G-YSXL9YL6V4');
-    </script>
+            gtag('config', 'G-YSXL9YL6V4');
+        </script>
 
-    <!-- Twitter conversion tracking base code -->
-    <script>
-        ! function(e, t, n, s, u, a) {
-            e.twq || (s = e.twq = function() {
-                    s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
-                }, s.version = '1.1', s.queue = [], u = t.createElement(n), u.async = !0, u.src =
-                'https://static.ads-twitter.com/uwt.js',
-                a = t.getElementsByTagName(n)[0], a.parentNode.insertBefore(u, a))
-        }(window, document, 'script');
-        twq('config', 'okdd6');
-    </script>
-    <!-- End Twitter conversion tracking base code -->
+        <!-- Twitter conversion tracking base code -->
+        <script>
+            ! function(e, t, n, s, u, a) {
+                e.twq || (s = e.twq = function() {
+                        s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
+                    }, s.version = '1.1', s.queue = [], u = t.createElement(n), u.async = !0, u.src =
+                    'https://static.ads-twitter.com/uwt.js',
+                    a = t.getElementsByTagName(n)[0], a.parentNode.insertBefore(u, a))
+            }(window, document, 'script');
+            twq('config', 'okdd6');
+        </script>
+        <!-- End Twitter conversion tracking base code -->
 
-    <!-- Google Tag Manager -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-K36WC3T7');
-    </script>
-    <!-- End Google Tag Manager -->
+        <!-- Google Tag Manager -->
+        <script>
+            (function(w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js'
+                });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
+                j.async = true;
+                j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-K36WC3T7');
+        </script>
+        <!-- End Google Tag Manager -->
 
-    <script>
-        ! function(w, d, t) {
-            w.TiktokAnalyticsObject = t;
-            var ttq = w[t] = w[t] || [];
-            ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias",
-                "group", "enableCookie", "disableCookie"
-            ], ttq.setAndDefer = function(t, e) {
-                t[e] = function() {
-                    t.push([e].concat(Array.prototype.slice.call(arguments, 0)))
-                }
-            };
-            for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
-            ttq.instance = function(t) {
-                for (var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++) ttq.setAndDefer(e, ttq.methods[n]);
-                return e
-            }, ttq.load = function(e, n) {
-                var i = "https://analytics.tiktok.com/i18n/pixel/events.js";
-                ttq._i = ttq._i || {}, ttq._i[e] = [], ttq._i[e]._u = i, ttq._t = ttq._t || {}, ttq._t[e] = +new Date,
-                    ttq._o = ttq._o || {}, ttq._o[e] = n || {};
-                var o = document.createElement("script");
-                o.type = "text/javascript", o.async = !0, o.src = i + "?sdkid=" + e + "&lib=" + t;
-                var a = document.getElementsByTagName("script")[0];
-                a.parentNode.insertBefore(o, a)
-            };
+        <script>
+            ! function(w, d, t) {
+                w.TiktokAnalyticsObject = t;
+                var ttq = w[t] = w[t] || [];
+                ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias",
+                    "group", "enableCookie", "disableCookie"
+                ], ttq.setAndDefer = function(t, e) {
+                    t[e] = function() {
+                        t.push([e].concat(Array.prototype.slice.call(arguments, 0)))
+                    }
+                };
+                for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+                ttq.instance = function(t) {
+                    for (var e = ttq._i[t] || [], n = 0; n < ttq.methods.length; n++) ttq.setAndDefer(e, ttq.methods[n]);
+                    return e
+                }, ttq.load = function(e, n) {
+                    var i = "https://analytics.tiktok.com/i18n/pixel/events.js";
+                    ttq._i = ttq._i || {}, ttq._i[e] = [], ttq._i[e]._u = i, ttq._t = ttq._t || {}, ttq._t[e] = +new Date,
+                        ttq._o = ttq._o || {}, ttq._o[e] = n || {};
+                    var o = document.createElement("script");
+                    o.type = "text/javascript", o.async = !0, o.src = i + "?sdkid=" + e + "&lib=" + t;
+                    var a = document.getElementsByTagName("script")[0];
+                    a.parentNode.insertBefore(o, a)
+                };
 
-            ttq.load('CN47VP3C77U706OO112G');
-            ttq.page();
-        }(window, document, 'ttq');
-    </script>
+                ttq.load('CN47VP3C77U706OO112G');
+                ttq.page();
+            }(window, document, 'ttq');
+        </script>
 
-    <!-- Hotjar Tracking Code for https://alnukbah.com -->
-    <script>
-        (function(h, o, t, j, a, r) {
-            h.hj = h.hj || function() {
-                (h.hj.q = h.hj.q || []).push(arguments)
-            };
-            h._hjSettings = {
-                hjid: 3861869,
-                hjsv: 6
-            };
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script');
-            r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    </script>
+        <!-- Hotjar Tracking Code for https://alnukbah.com -->
+        <script>
+            (function(h, o, t, j, a, r) {
+                h.hj = h.hj || function() {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {
+                    hjid: 3861869,
+                    hjsv: 6
+                };
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
 
-    {{ setting('site.analysiscode') }}
+        {{ app_setting('site.analysiscode') }}
+    @endunless
     <meta charset="utf-8">
-    <meta name="description" content="{{ setting('site.description') }}">
-    <meta name="keywords" content="{{ setting('site.keywords') }}">
-    <meta name="author" content="{{ setting('site.author') }}">
-    <title>{{ setting('site.title') }}</title>
+    <meta name="description" content="{{ app_setting('site.description') }}">
+    <meta name="keywords" content="{{ app_setting('site.keywords') }}">
+    <meta name="author" content="{{ app_setting('site.author') }}">
+    <title>{{ app_setting('site.title') }}</title>
     <!-- Stylesheets -->
     <link href="{{ asset('assets/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -120,20 +117,19 @@
     <!-- Color Themes -->
     <link id="theme-color-file" href="{{ asset('assets/css/color-themes/default-color.css') }}" rel="stylesheet">
 
-    <link href="https://fonts.googleapis.com/css2?family=Anybody:wght@300;400;500;600;700;800;900&amp;display=swap"
-        rel="stylesheet">
+    <link href="{{ asset('assets/css/fonts-local.css') }}" rel="stylesheet">
     @php
-        $favicon = json_decode(setting('site.favicon'));
+        $favicon = json_decode(app_setting('site.favicon'));
 
     @endphp
 
-    <link rel="shortcut icon" href="{{ asset('storage/app/public/' . $favicon[0]->download_link) }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('storage/app/public/' . $favicon[0]->download_link) }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('storage/' . $favicon[0]->download_link) }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('storage/' . $favicon[0]->download_link) }}" type="image/x-icon">
 
     <!-- Responsive -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.css') }}">
 
     <head>
 
@@ -336,28 +332,28 @@
                                 <!-- Info List -->
                                 <ul class="header-top_list">
                                     <li class="our_list">
-                                        <span class="icon"><img src="assets/images/icons/phone.png"
+                                        <span class="icon"><img src="{{ asset('assets/images/icons/phone.png') }}"
                                                 alt="" /></span>
-                                        <a href="tel: {{ setting('site.phone') }}"> {{ setting('site.phone') }}</a>
+                                        <a href="tel: {{ app_setting('site.phone') }}"> {{ app_setting('site.phone') }}</a>
                                     </li>
                                 </ul>
                                 <!-- Social Box -->
                                 <div class="header_socials">
                                     <span> </span>
-                                    @if (setting('site.facebook') != '')
-                                        <a href="{{ setting('site.facebook') }}"><i
+                                    @if (app_setting('site.facebook') != '')
+                                        <a href="{{ app_setting('site.facebook') }}"><i
                                                 class="fa-brands fa-facebook-f"></i></a>
                                     @endif
-                                    @if (setting('site.twitter') != '')
-                                        <a href="{{ setting('site.twitter') }}"><i
+                                    @if (app_setting('site.twitter') != '')
+                                        <a href="{{ app_setting('site.twitter') }}"><i
                                                 class="fa-brands fa-twitter"></i></a>
                                     @endif
-                                    @if (setting('site.youtube') != '')
-                                        <a href="{{ setting('site.youtube') }}"><i
+                                    @if (app_setting('site.youtube') != '')
+                                        <a href="{{ app_setting('site.youtube') }}"><i
                                                 class="fa-brands fa-youtube"></i></a>
                                     @endif
-                                    @if (setting('site.instagram') != '')
-                                        <a href="{{ setting('site.instagram') }}"><i
+                                    @if (app_setting('site.instagram') != '')
+                                        <a href="{{ app_setting('site.instagram') }}"><i
                                                 class="fa-brands fa-instagram"></i></a>
                                     @endif
                                 </div>
@@ -376,10 +372,10 @@
 
                             <div class="logo-box">
                                 <div class="logo"><a href="{{ route('/') }}"><img
-                                            src="{{ asset('storage/app/public/' . setting('site.logo_white')) }}"
+                                            src="{{ asset('storage/' . app_setting('site.logo_white')) }}"
                                             alt="" title="" class="marginlogo"></a></div>
                                 <div class="logo-2"><a href="{{ route('/') }}"><img
-                                            src="{{ asset('storage/app/public/' . setting('site.big_logo')) }}"
+                                            src="{{ asset('storage/' . app_setting('site.big_logo')) }}"
                                             alt="" title="" class="marginlogo2"></a></div>
                             </div>
 
@@ -515,7 +511,7 @@
 
                 <nav class="menu-box">
                     <div class="nav-logo"><a href="{{ route('/') }}"><img
-                                src="{{ asset('storage/app/public/' . setting('site.logo_white')) }}" width="300"
+                                src="{{ asset('storage/' . app_setting('site.logo_white')) }}" width="300"
                                 alt="" title=""></a></div>
                     <div class="menu-outer">
                         <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header--></div>

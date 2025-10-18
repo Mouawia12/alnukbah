@@ -16,15 +16,10 @@ use function trim;
 use PHPUnit\Framework\ExpectationFailedException;
 use SebastianBergmann\Comparator\ComparisonFailure;
 use SebastianBergmann\Comparator\Factory as ComparatorFactory;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
- * Constraint that checks if one value is equal to another.
- *
- * Equality is checked with PHP's == operator, the operator is explained in
- * detail at {@url https://php.net/manual/en/types.comparisons.php}.
- * Two values are equal if they have the same value disregarding type.
- *
- * The expected value is passed in the constructor.
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
 final class IsEqual extends Constraint
 {
@@ -67,8 +62,6 @@ final class IsEqual extends Constraint
      * failure.
      *
      * @throws ExpectationFailedException
-     *
-     * @return bool
      */
     public function evaluate($other, string $description = '', bool $returnResult = false): ?bool
     {
@@ -84,7 +77,7 @@ final class IsEqual extends Constraint
         try {
             $comparator = $comparatorFactory->getComparatorFor(
                 $this->value,
-                $other
+                $other,
             );
 
             $comparator->assertEquals(
@@ -92,7 +85,7 @@ final class IsEqual extends Constraint
                 $other,
                 $this->delta,
                 $this->canonicalize,
-                $this->ignoreCase
+                $this->ignoreCase,
             );
         } catch (ComparisonFailure $f) {
             if ($returnResult) {
@@ -101,7 +94,7 @@ final class IsEqual extends Constraint
 
             throw new ExpectationFailedException(
                 trim($description . "\n" . $f->getMessage()),
-                $f
+                $f,
             );
         }
 
@@ -111,7 +104,7 @@ final class IsEqual extends Constraint
     /**
      * Returns a string representation of the constraint.
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function toString(): string
     {
@@ -124,21 +117,21 @@ final class IsEqual extends Constraint
 
             return sprintf(
                 "is equal to '%s'",
-                $this->value
+                $this->value,
             );
         }
 
         if ($this->delta != 0) {
             $delta = sprintf(
                 ' with delta <%F>',
-                $this->delta
+                $this->delta,
             );
         }
 
         return sprintf(
             'is equal to %s%s',
             $this->exporter()->export($this->value),
-            $delta
+            $delta,
         );
     }
 }

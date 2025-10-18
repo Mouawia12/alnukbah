@@ -1,6 +1,10 @@
 {{-- resources/views/articles.blade.php --}}
 @include('include.header')
 
+@php
+    $siteLogo = app_setting('site.logo');
+@endphp
+
 <!-- Page Title -->
 <section class="page-title" style="background-image:url({{ asset('assets/images/background/page-title_bg.jpg') }})">
   <div class="auto-container">
@@ -20,8 +24,8 @@
     <!-- Sec Title -->
     <div class="sec-title centered">
       <div class="sec-title_icon">
-        {{-- استخدم لوجو افتراضي أو استدعِه من إعداداتك الخاصة --}}
-        <img src="{{ asset('storage/site/logo.png') }}" alt="شعار الموقع" />
+        <img src="{{ $siteLogo ? asset('storage/' . ltrim($siteLogo, '/')) : asset('assets/images/logo.png') }}"
+          alt="شعار الموقع" />
       </div>
       <div class="sec-title_title">
         هدفنا الوحيد هو توفير الراحة لعملائنا، وفيما يلي بعض من تعليقاتهم

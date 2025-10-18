@@ -10,7 +10,7 @@
             <div class="row clearfix">
                 <div class="column col-lg-6 col-md-6 col-sm-12">
                     <div class="footer-logo"><a href="index.html"><img
-                                src="{{ asset('storage/app/public/' . setting('site.logo_white')) }}" width="300"
+                                src="{{ asset('storage/' . app_setting('site.logo_white')) }}" width="300"
                                 alt="" title=""></a></div>
                 </div>
                 <div class="column col-lg-6 col-md-6 col-sm-12">
@@ -38,8 +38,8 @@
                 <!-- Footer Column -->
                 <div class="footer-column col-lg-4 col-md-6 col-sm-12">
                     <div class="footer-widget logo-widget">
-                        <h5>{{ setting('site.title') }}</h5>
-                        <p>{{ setting('site.description') }} </p>
+                        <h5>{{ app_setting('site.title') }}</h5>
+                        <p>{{ app_setting('site.description') }} </p>
                     </div>
                 </div>
 
@@ -75,9 +75,9 @@
                     <div class="footer-widget contact-widget">
                         <h5>اتصل بنا</h5>
                         <ul class="footer-contact_list">
-                            <li><span></span>{{ setting('site.phone') }}</li>
-                            <li><span></span>{{ setting('site.email') }}</li>
-                            <li><span></span>{{ setting('site.location') }}</li>
+                            <li><span></span>{{ app_setting('site.phone') }}</li>
+                            <li><span></span>{{ app_setting('site.email') }}</li>
+                            <li><span></span>{{ app_setting('site.location') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -98,17 +98,17 @@
                 </div>
                 <!-- Social Box -->
                 <div class="footer_socials">
-                    @if (setting('site.facebook') != '')
-                        <a href="{{ setting('site.facebook') }}"><i class="fa-brands fa-facebook-f"></i></a>
+                    @if (app_setting('site.facebook') != '')
+                        <a href="{{ app_setting('site.facebook') }}"><i class="fa-brands fa-facebook-f"></i></a>
                     @endif
-                    @if (setting('site.twitter') != '')
-                        <a href="{{ setting('site.twitter') }}"><i class="fa-brands fa-twitter"></i></a>
+                    @if (app_setting('site.twitter') != '')
+                        <a href="{{ app_setting('site.twitter') }}"><i class="fa-brands fa-twitter"></i></a>
                     @endif
-                    @if (setting('site.youtube') != '')
-                        <a href="{{ setting('site.youtube') }}"><i class="fa-brands fa-youtube"></i></a>
+                    @if (app_setting('site.youtube') != '')
+                        <a href="{{ app_setting('site.youtube') }}"><i class="fa-brands fa-youtube"></i></a>
                     @endif
-                    @if (setting('site.instagram') != '')
-                        <a href="{{ setting('site.instagram') }}"><i class="fa-brands fa-instagram"></i></a>
+                    @if (app_setting('site.instagram') != '')
+                        <a href="{{ app_setting('site.instagram') }}"><i class="fa-brands fa-instagram"></i></a>
                     @endif
                 </div>
             </div>
@@ -174,22 +174,24 @@
     @endif
 </script>
 
-<script src="{{ asset('lightgallery.umd.js') }}"></script>
-<script src="{{ asset('lightgallery.min.js') }}"></script>
+@unless (app()->environment('local'))
+    <script src="{{ asset('lightgallery.umd.js') }}"></script>
+    <script src="{{ asset('lightgallery.min.js') }}"></script>
 
-<!-- lightgallery plugins -->
+    <!-- lightgallery plugins -->
 
-<script src="{{ asset('plugins/thumbnail/lg-thumbnail.umd.js') }}"></script>
-<script src="{{ asset('plugins/zoom/lg-zoom.umd.js') }}"></script>
-<script type="text/javascript">
-    lightGallery(document.getElementById('lightgallery'), {
-        selector: '.item',
-        plugins: [lgZoom, lgThumbnail],
-        speed: 500,
-        licenseKey: 'your_license_key'
+    <script src="{{ asset('plugins/thumbnail/lg-thumbnail.umd.js') }}"></script>
+    <script src="{{ asset('plugins/zoom/lg-zoom.umd.js') }}"></script>
+    <script type="text/javascript">
+        lightGallery(document.getElementById('lightgallery'), {
+            selector: '.item',
+            plugins: [lgZoom, lgThumbnail],
+            speed: 500,
+            licenseKey: 'your_license_key'
 
-    });
-</script>
+        });
+    </script>
+@endunless
 <div class="icon-float icon-float-call">
     <a class="float" href="tel:0508073635" target="_blank" data-kmt="1">
         <i class="fa fa-phone phoneicon"></i>

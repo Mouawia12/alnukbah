@@ -1,7 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
-use SebastianBergmann\CodeCoverage\Driver\Driver;
+use SebastianBergmann\CodeCoverage\Driver\Selector;
 use PHPUnit\TextUI\XmlConfiguration\Loader;
 use PHPUnit\TextUI\XmlConfiguration\PhpHandler;
 
@@ -40,7 +40,7 @@ function __phpunit_run_isolated_test()
         $filter = unserialize('{codeCoverageFilter}');
 
         $codeCoverage = new CodeCoverage(
-            Driver::{driverMethod}($filter),
+            (new Selector)->{driverMethod}($filter),
             $filter
         );
 
@@ -71,8 +71,9 @@ function __phpunit_run_isolated_test()
     }
 
     ini_set('xdebug.scream', '0');
+
     @rewind(STDOUT); /* @ as not every STDOUT target stream is rewindable */
-    if ($stdout = stream_get_contents(STDOUT)) {
+    if ($stdout = @stream_get_contents(STDOUT)) {
         $output = $stdout . $output;
         $streamMetaData = stream_get_meta_data(STDOUT);
         if (!empty($streamMetaData['stream_type']) && 'STDIO' === $streamMetaData['stream_type']) {
@@ -81,13 +82,16 @@ function __phpunit_run_isolated_test()
         }
     }
 
-    print serialize(
-      [
-        'testResult'    => $test->getResult(),
-        'numAssertions' => $test->getNumAssertions(),
-        'result'        => $result,
-        'output'        => $output
-      ]
+    file_put_contents(
+        '{processResultFile}',
+        serialize(
+            [
+                'testResult'    => $test->getResult(),
+                'numAssertions' => $test->getNumAssertions(),
+                'result'        => $result,
+                'output'        => $output
+            ]
+        )
     );
 }
 

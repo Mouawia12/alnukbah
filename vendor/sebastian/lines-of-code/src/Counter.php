@@ -31,10 +31,13 @@ final class Counter
     public function countInSourceString(string $source): LinesOfCode
     {
         $linesOfCode = substr_count($source, "\n");
-        $parser      = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+
+        if ($linesOfCode === 0 && !empty($source)) {
+            $linesOfCode = 1;
+        }
 
         try {
-            $nodes = $parser->parse($source);
+            $nodes = (new ParserFactory)->createForHostVersion()->parse($source);
 
             assert($nodes !== null);
 

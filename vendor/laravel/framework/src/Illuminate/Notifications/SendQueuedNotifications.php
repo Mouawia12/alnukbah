@@ -3,6 +3,7 @@
 namespace Illuminate\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeEncrypted;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +51,20 @@ class SendQueuedNotifications implements ShouldQueue
     public $timeout;
 
     /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions;
+
+    /**
+     * Indicates if the job should be encrypted.
+     *
+     * @var bool
+     */
+    public $shouldBeEncrypted = false;
+
+    /**
      * Create a new job instance.
      *
      * @param  \Illuminate\Notifications\Notifiable|\Illuminate\Support\Collection  $notifiables
@@ -57,13 +72,16 @@ class SendQueuedNotifications implements ShouldQueue
      * @param  array|null  $channels
      * @return void
      */
-    public function __construct($notifiables, $notification, array $channels = null)
+    public function __construct($notifiables, $notification, ?array $channels = null)
     {
         $this->channels = $channels;
         $this->notification = $notification;
         $this->notifiables = $this->wrapNotifiables($notifiables);
         $this->tries = property_exists($notification, 'tries') ? $notification->tries : null;
         $this->timeout = property_exists($notification, 'timeout') ? $notification->timeout : null;
+        $this->maxExceptions = property_exists($notification, 'maxExceptions') ? $notification->maxExceptions : null;
+        $this->afterCommit = property_exists($notification, 'afterCommit') ? $notification->afterCommit : null;
+        $this->shouldBeEncrypted = $notification instanceof ShouldBeEncrypted;
     }
 
     /**
@@ -118,7 +136,7 @@ class SendQueuedNotifications implements ShouldQueue
     }
 
     /**
-     * Get number of seconds before a released notification will be available.
+     * Get the number of seconds before a released notification will be available.
      *
      * @return mixed
      */
@@ -132,9 +150,9 @@ class SendQueuedNotifications implements ShouldQueue
     }
 
     /**
-     * Get the expiration for the notification.
+     * Determine the time at which the job should timeout.
      *
-     * @return mixed
+     * @return \DateTime|null
      */
     public function retryUntil()
     {

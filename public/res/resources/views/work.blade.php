@@ -70,9 +70,9 @@
 				
                      @foreach ($images as $image)
 					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/app/public/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
 
-						<img src="{{asset("storage/app/public/".$image)}}" class="zoomimage" alt="" />
+						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
 						<div class="zoommiddle">
 							<div class="zoomtext"><span class="fa fa-search"></span></div>
 						  </div>

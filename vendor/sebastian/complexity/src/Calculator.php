@@ -31,10 +31,8 @@ final class Calculator
      */
     public function calculateForSourceString(string $source): ComplexityCollection
     {
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-
         try {
-            $nodes = $parser->parse($source);
+            $nodes = (new ParserFactory)->createForHostVersion()->parse($source);
 
             assert($nodes !== null);
 

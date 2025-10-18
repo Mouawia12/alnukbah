@@ -13,9 +13,7 @@ use function is_dir;
 use function sprintf;
 
 /**
- * Constraint that checks if the directory(name) that it is evaluated for exists.
- *
- * The file path to check is passed as $other in evaluate().
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
 final class DirectoryExists extends Constraint
 {
@@ -50,7 +48,7 @@ final class DirectoryExists extends Constraint
     {
         return sprintf(
             'directory "%s" exists',
-            $other
+            $other,
         );
     }
 }

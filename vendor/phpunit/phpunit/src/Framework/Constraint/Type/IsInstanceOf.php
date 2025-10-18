@@ -12,12 +12,10 @@ namespace PHPUnit\Framework\Constraint;
 use function sprintf;
 use ReflectionClass;
 use ReflectionException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
- * Constraint that asserts that the object it is evaluated for is an instance
- * of a given class.
- *
- * The expected class name is passed in the constructor.
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
 final class IsInstanceOf extends Constraint
 {
@@ -39,7 +37,7 @@ final class IsInstanceOf extends Constraint
         return sprintf(
             'is instance of %s "%s"',
             $this->getType(),
-            $this->className
+            $this->className,
         );
     }
 
@@ -62,7 +60,7 @@ final class IsInstanceOf extends Constraint
      *
      * @param mixed $other evaluated value or object
      *
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function failureDescription($other): string
     {
@@ -70,7 +68,7 @@ final class IsInstanceOf extends Constraint
             '%s is an instance of %s "%s"',
             $this->exporter()->shortenedExport($other),
             $this->getType(),
-            $this->className
+            $this->className,
         );
     }
 
