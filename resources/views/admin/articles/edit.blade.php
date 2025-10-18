@@ -62,6 +62,17 @@
 </div>
 
 <div class="bg-slate-800/50 border border-slate-700 rounded-2xl shadow-soft p-6 space-y-8">
+    <div class="bg-slate-900/60 border border-slate-700 rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <p class="text-xs text-slate-400 mb-1">تاريخ الإنشاء</p>
+            <p class="text-sm font-semibold text-slate-100">{{ optional($article->created_at)->format('Y-m-d H:i') ?? '—' }}</p>
+        </div>
+        <div class="text-left sm:text-right">
+            <p class="text-xs text-slate-400 mb-1">درجة السيو الحالية</p>
+            <p class="text-2xl font-bold text-slate-100" id="seoScoreValue">0%</p>
+        </div>
+    </div>
+
     @if ($errors->any())
         <div class="rounded-lg border border-red-500/50 bg-red-500/10 p-4">
             <div class="font-bold mb-2 text-red-300">حدثت أخطاء:</div>
@@ -337,7 +348,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('titleInput');
     const coverInput = document.getElementById('coverInput');
     const seoAssistant = document.getElementById('seoAssistant');
+    const seoScoreValue = document.getElementById('seoScoreValue');
     let hasInitialCover = seoAssistant?.dataset.initialCover === '1';
+
+    const statusState = {
+        titleKeyword: 'neutral',
+        introKeyword: 'neutral',
+        titleLength: 'neutral',
+        wordCount: 'neutral',
+        coverImage: 'neutral'
+    };
 
     const colorClasses = ['bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-slate-700'];
     const baseIndicatorClasses = ['status-indicator', 'w-2', 'h-full', 'rounded-full'];
@@ -372,27 +392,50 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('SEO check', { keyword, titleLength: title.length, wordTotal });
 
         if (!keyword) {
-            setIndicator('titleKeyword', 'neutral');
-            setIndicator('introKeyword', 'neutral');
+            statusState.titleKeyword = 'neutral';
+            statusState.introKeyword = 'neutral';
         } else {
             const titleHasKeyword = title.includes(keyword);
             const introHasKeyword = firstParagraphText.includes(keyword);
-            setIndicator('titleKeyword', titleHasKeyword ? 'good' : 'bad');
-            setIndicator('introKeyword', introHasKeyword ? 'good' : 'bad');
+            statusState.titleKeyword = titleHasKeyword ? 'good' : 'bad';
+            statusState.introKeyword = introHasKeyword ? 'good' : 'bad';
         }
+        setIndicator('titleKeyword', statusState.titleKeyword);
+        setIndicator('introKeyword', statusState.introKeyword);
 
-        if (!title) setIndicator('titleLength', 'neutral');
-        else if (title.length < 30) setIndicator('titleLength', 'bad');
-        else if (title.length <= 70) setIndicator('titleLength', 'good');
-        else setIndicator('titleLength', 'medium');
+        if (!title) statusState.titleLength = 'neutral';
+        else if (title.length < 30) statusState.titleLength = 'bad';
+        else if (title.length <= 70) statusState.titleLength = 'good';
+        else statusState.titleLength = 'medium';
+        setIndicator('titleLength', statusState.titleLength);
 
-        if (wordTotal === 0) setIndicator('wordCount', 'neutral');
-        else if (wordTotal < 200) setIndicator('wordCount', 'bad');
-        else if (wordTotal < 300) setIndicator('wordCount', 'medium');
-        else setIndicator('wordCount', 'good');
+        if (wordTotal === 0) statusState.wordCount = 'neutral';
+        else if (wordTotal < 200) statusState.wordCount = 'bad';
+        else if (wordTotal < 300) statusState.wordCount = 'medium';
+        else statusState.wordCount = 'good';
+        setIndicator('wordCount', statusState.wordCount);
 
         const hasCover = (coverInput?.files.length || 0) > 0 || hasInitialCover;
-        setIndicator('coverImage', hasCover ? 'good' : 'bad');
+        statusState.coverImage = hasCover ? 'good' : 'bad';
+        setIndicator('coverImage', statusState.coverImage);
+
+        if (seoScoreValue) {
+            const weight = { good: 1, medium: 0.6, bad: 0, neutral: 0 };
+            const totalChecks = Object.keys(statusState).length;
+            const achieved = Object.values(statusState).reduce((sum, state) => sum + (weight[state] ?? 0), 0);
+            const score = Math.round((achieved / totalChecks) * 100);
+            seoScoreValue.textContent = `${score}%`;
+            seoScoreValue.classList.remove('text-emerald-400', 'text-amber-400', 'text-rose-400', 'text-slate-100');
+            if (score >= 80) {
+                seoScoreValue.classList.add('text-emerald-400');
+            } else if (score >= 50) {
+                seoScoreValue.classList.add('text-amber-400');
+            } else if (score > 0) {
+                seoScoreValue.classList.add('text-rose-400');
+            } else {
+                seoScoreValue.classList.add('text-slate-100');
+            }
+        }
     };
 
     const attachSEOAssistant = (instance) => {
