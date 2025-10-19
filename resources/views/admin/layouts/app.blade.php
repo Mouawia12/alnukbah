@@ -17,7 +17,7 @@
     @stack('styles')
 
     @php
-        $adminFaviconRaw = app_setting('site.favicon');
+        $adminFaviconRaw = app_setting('site.logo');
         $adminFaviconPath = null;
 
         if (!empty($adminFaviconRaw)) {

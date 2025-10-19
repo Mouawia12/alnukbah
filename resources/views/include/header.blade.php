@@ -119,17 +119,17 @@
 
     <link href="{{ asset('assets/css/fonts-local.css') }}" rel="stylesheet">
     @php
-        $faviconRaw = app_setting('site.favicon');
+        $logoRaw = app_setting('site.logo');
         $faviconPath = null;
 
-        if (!empty($faviconRaw)) {
+        if (!empty($logoRaw)) {
             $downloadLink = null;
-            $decoded = json_decode($faviconRaw, true);
+            $decoded = json_decode($logoRaw, true);
 
             if (is_array($decoded) && isset($decoded[0]['download_link'])) {
                 $downloadLink = $decoded[0]['download_link'];
-            } elseif (is_string($faviconRaw)) {
-                $downloadLink = $faviconRaw;
+            } elseif (is_string($logoRaw)) {
+                $downloadLink = $logoRaw;
             }
 
             if (is_string($downloadLink) && $downloadLink !== '') {
