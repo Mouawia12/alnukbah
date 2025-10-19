@@ -13,6 +13,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkController;
+use App\Http\Controllers\AdminPasswordController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -114,5 +115,9 @@ Route::prefix('admin')
         Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+        // 🔐 تغيير كلمة المرور
+        Route::get('/password', [AdminPasswordController::class, 'edit'])->name('admin.password.edit');
+        Route::put('/password', [AdminPasswordController::class, 'update'])->name('admin.password.update');
 
     });

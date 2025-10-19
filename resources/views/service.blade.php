@@ -70,31 +70,54 @@
 				
 			</div>
 			<div class="service-detail_video">
-				@if ($servicedetail->video!=null && $servicedetail->video!="[]" )
-						
 				@php
-$video=json_decode($servicedetail->video);
+				    $videoItems = $servicedetail->video;
+				    if (is_string($videoItems) && $videoItems !== '') {
+				        $decoded = json_decode($videoItems, true);
+				        $videoItems = is_array($decoded) ? $decoded : [];
+				    } elseif (!is_array($videoItems)) {
+				        $videoItems = [];
+				    }
+				@endphp
 
-@endphp
-			
-
-				<img src="{{asset('assets/images/cover.jpg')}}" alt="" />
-				<a href="{{asset("storage/".$video[0]->download_link)}}" class="lightbox-video services-one_play"><span class="fa fa-play"><i class="ripple"></i></span></a>
-				@endif	</div>
+				@if (!empty($videoItems))
+					<img src="{{asset('assets/images/cover.jpg')}}" alt="" />
+					@php
+					    $firstVideo = $videoItems[0];
+					    $videoPath = is_array($firstVideo) && isset($firstVideo['download_link'])
+					        ? $firstVideo['download_link']
+					        : (is_object($firstVideo) && isset($firstVideo->download_link) ? $firstVideo->download_link : null);
+					@endphp
+					@if ($videoPath)
+						<a href="{{asset("storage/".$videoPath)}}" class="lightbox-video services-one_play"><span class="fa fa-play"><i class="ripple"></i></span></a>
+					@endif
+				@endif
+				</div>
 			<div class="project-detail_gallery">
 				<div class="row clearfix" id="lightgallery">
-					@if ($servicedetail->images!=null)
 					@php
-	                  $images=json_decode($servicedetail->images);
+					    $galleryImages = $servicedetail->images;
+					    if (is_string($galleryImages) && $galleryImages !== '') {
+					        $decoded = json_decode($galleryImages, true);
+					        $galleryImages = is_array($decoded) ? $decoded : [];
+					    } elseif (!is_array($galleryImages)) {
+					        $galleryImages = [];
+					    }
+					@endphp
+					@if (!empty($galleryImages))
+					    @if($servicedetail->setnumberonimage==1)
+                     @foreach ($galleryImages as $image)
+                    @php
+                        $imagePath = is_array($image)
+                            ? ($image['download_link'] ?? $image['path'] ?? reset($image))
+                            : (is_object($image) ? ($image->download_link ?? $image->path ?? null) : $image);
                     @endphp
-					
-				    @if($servicedetail->setnumberonimage==1)
-                     @foreach ($images as $image)
+                    @if ($imagePath)
 					<!-- Project Detail Gallery Image -->
 					
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$imagePath)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
                         <div class="image-container">
-						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
+						<img src="{{asset("storage/".$imagePath)}}" class="zoomimage" alt="" />
 			       			 <div class="number-overlay">{{app_setting('site.phone')}}</div>
                          	</div>
 						<div class="zoommiddle">
@@ -102,17 +125,25 @@ $video=json_decode($servicedetail->video);
 						  </div>
 				
 					</div>
+					@endif
 					 @endforeach
 						  @else	
-						     @foreach ($images as $image)
+						     @foreach ($galleryImages as $image)
+                    @php
+                        $imagePath = is_array($image)
+                            ? ($image['download_link'] ?? $image['path'] ?? reset($image))
+                            : (is_object($image) ? ($image->download_link ?? $image->path ?? null) : $image);
+                    @endphp
+                    @if ($imagePath)
 					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$imagePath)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
 
-						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
+						<img src="{{asset("storage/".$imagePath)}}" class="zoomimage" alt="" />
 						<div class="zoommiddle">
 							<div class="zoomtext"><span class="fa fa-search"></span></div>
 						  </div>
 					</div>
+					@endif
 					 @endforeach
 						   @endif
 					 @endif

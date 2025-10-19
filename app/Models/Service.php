@@ -22,7 +22,7 @@ class Service extends Model
 
     public function subservices()
     {
-        return $this->hasMany(\App\Models\SubService::class);
+        return $this->hasMany(\App\Models\Subservice::class);
     }
 
 }

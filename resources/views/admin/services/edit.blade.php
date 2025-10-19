@@ -28,6 +28,29 @@
                   class="w-full rounded-xl border border-slate-700 bg-slate-900/60 p-3 text-slate-100 focus:ring-2 focus:ring-indigo-500">{{ old('description', $service->description) }}</textarea>
     </div>
 
+    {{-- 📝 نص العلامة المائية --}}
+    <div>
+        <label class="block mb-2 text-sm text-slate-300">نص العلامة المائية</label>
+        <input type="text" name="watermark_text" value="{{ old('watermark_text') }}" maxlength="255"
+               class="w-full rounded-xl border border-slate-700 bg-slate-900/60 p-3 text-slate-100 focus:ring-2 focus:ring-indigo-500"
+               placeholder="مثال: www.example.com أو 966-555-123456">
+        <p class="text-xs text-slate-500 mt-2">اترك الحقل فارغاً لاستخدام الاسم الافتراضي للتطبيق.</p>
+        @error('watermark_text')
+            <p class="text-xs text-rose-400 mt-2">{{ $message }}</p>
+        @enderror
+    </div>
+
+    {{-- 🏷️ خيار العلامة المائية --}}
+    <div class="flex items-start gap-3">
+        <input type="checkbox" id="apply_watermark" name="apply_watermark" value="1"
+               class="mt-1 h-5 w-5 rounded border-slate-600 bg-slate-800 text-indigo-500 focus:ring-indigo-500"
+               {{ old('apply_watermark') ? 'checked' : '' }}>
+        <label for="apply_watermark" class="text-sm text-slate-300 leading-relaxed">
+            تطبيق علامة مائية على كل الصور الحالية والجديدة عند حفظ التعديلات.
+            <span class="block text-xs text-slate-500 mt-1">اترك الخيار غير محدد إذا كنت لا ترغب في تعديل الصور الحالية.</span>
+        </label>
+    </div>
+
     {{-- 🖼️ الصورة الرئيسية --}}
     <div>
         <label class="block mb-2 text-sm text-slate-300">الصورة الرئيسية الحالية</label>

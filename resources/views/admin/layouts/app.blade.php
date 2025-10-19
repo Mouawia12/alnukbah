@@ -15,6 +15,24 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
+
+    @php
+        $adminFavicon = app_setting('site.favicon');
+        $adminFaviconPath = null;
+
+        if ($adminFavicon) {
+            $decodedFavicon = json_decode($adminFavicon);
+            if (is_array($decodedFavicon) && isset($decodedFavicon[0]->download_link)) {
+                $adminFaviconPath = asset('storage/' . ltrim($decodedFavicon[0]->download_link, '/'));
+            }
+        }
+    @endphp
+
+    @if ($adminFaviconPath)
+        <link rel="shortcut icon" href="{{ $adminFaviconPath }}" type="image/x-icon">
+        <link rel="icon" href="{{ $adminFaviconPath }}" type="image/x-icon">
+    @endif
+
     <style>
         body {
             font-family: "Tajawal", sans-serif;
@@ -303,7 +321,9 @@
                 </button>
                 <div id="profileMenu"
                     class="hidden absolute left-0 mt-2 bg-slate-800 rounded-lg shadow-lg border border-slate-700 p-2 w-48">
-                    <a href="#" class="block px-3 py-2 hover:bg-slate-700 rounded">الملف الشخصي</a>
+                    <a href="{{ route('admin.password.edit') }}" class="block px-3 py-2 hover:bg-slate-700 rounded">
+                        تغيير كلمة المرور
+                    </a>
                     <form action="{{ route('logout') }}" method="POST" class="mt-2">
                         @csrf
                         <button class="w-full text-right px-3 py-2 hover:bg-slate-700 rounded">تسجيل الخروج</button>
