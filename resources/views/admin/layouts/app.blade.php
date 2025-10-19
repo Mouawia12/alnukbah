@@ -17,13 +17,21 @@
     @stack('styles')
 
     @php
-        $adminFavicon = app_setting('site.favicon');
+        $adminFaviconRaw = app_setting('site.favicon');
         $adminFaviconPath = null;
 
-        if ($adminFavicon) {
-            $decodedFavicon = json_decode($adminFavicon);
-            if (is_array($decodedFavicon) && isset($decodedFavicon[0]->download_link)) {
-                $downloadLink = str_replace('\\', '/', $decodedFavicon[0]->download_link);
+        if (!empty($adminFaviconRaw)) {
+            $downloadLink = null;
+            $decoded = json_decode($adminFaviconRaw, true);
+
+            if (is_array($decoded) && isset($decoded[0]['download_link'])) {
+                $downloadLink = $decoded[0]['download_link'];
+            } elseif (is_string($adminFaviconRaw)) {
+                $downloadLink = $adminFaviconRaw;
+            }
+
+            if (is_string($downloadLink) && $downloadLink !== '') {
+                $downloadLink = str_replace('\\', '/', $downloadLink);
                 $adminFaviconPath = asset('storage/' . ltrim($downloadLink, '/'));
             }
         }

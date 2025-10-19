@@ -53,6 +53,34 @@
         </div>
     @endif
 
+    <div class="grid gap-4 md:grid-cols-2">
+        <div class="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
+            <p class="text-sm text-slate-400 mb-2 flex items-center gap-2">
+                <i data-lucide="activity" class="w-4 h-4 text-emerald-400"></i>
+                نسبة قبول السيو
+            </p>
+            <div class="flex items-center justify-between">
+                <div class="flex items-baseline gap-3">
+                    <span id="seoScoreValue" class="text-3xl font-extrabold text-emerald-400">0%</span>
+                    <span id="seoScoreLabel" class="text-sm text-slate-400">ابدأ بإدخال المحتوى</span>
+                </div>
+                <span class="text-xs text-slate-500">يعتمد على العنوان، الكلمات المفتاحية، عدد الكلمات والصور.</span>
+            </div>
+            <div class="mt-4 h-2 w-full rounded-full bg-slate-800">
+                <div id="seoScoreBar" class="h-2 rounded-full bg-emerald-500 transition-all duration-300" style="width:0%"></div>
+            </div>
+        </div>
+
+        <div class="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
+            <p class="text-sm text-slate-400 mb-2 flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4 text-sky-400"></i>
+                تاريخ إنشاء المقال
+            </p>
+            <p class="text-lg font-semibold text-slate-100">سيتم تحديده تلقائياً بعد حفظ المقال.</p>
+            <p class="text-sm text-slate-500 mt-2">سيُعرض التاريخ والوقت هنا بعد إنشاء المقال.</p>
+        </div>
+    </div>
+
     <form id="articleForm" method="POST" action="{{ route('admin.articles.store') }}" enctype="multipart/form-data" class="space-y-8">
         @csrf
 
@@ -281,6 +309,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const titleInput = document.getElementById('titleInput');
     const coverInput = document.getElementById('coverInput');
     const seoAssistant = document.getElementById('seoAssistant');
+    const seoScoreValue = document.getElementById('seoScoreValue');
+    const seoScoreBar = document.getElementById('seoScoreBar');
+    const seoScoreLabel = document.getElementById('seoScoreLabel');
     let hasInitialCover = seoAssistant?.dataset.initialCover === '1';
 
     const colorClasses = ['bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-slate-700'];
@@ -300,6 +331,51 @@ document.addEventListener('DOMContentLoaded', function() {
         indicator.classList.add(colors[status] ?? colors.neutral);
     };
 
+    const updateSeoScore = (statuses) => {
+        if (!seoScoreValue || !seoScoreBar) return;
+
+        const keys = ['titleKeyword', 'titleLength', 'introKeyword', 'wordCount', 'coverImage'];
+        let score = 0;
+
+        keys.forEach(key => {
+            const status = statuses[key] ?? 'neutral';
+            if (status === 'good') score += 20;
+            else if (status === 'medium') score += 10;
+        });
+
+        seoScoreValue.textContent = `${score}%`;
+        const barWidth = Math.min(100, Math.max(0, score));
+        seoScoreBar.style.width = `${barWidth}%`;
+
+        const stateOptions = [
+            { min: 80, bar: 'bg-emerald-500', text: 'text-emerald-400', label: 'ممتاز' },
+            { min: 60, bar: 'bg-emerald-400', text: 'text-emerald-300', label: 'جيد' },
+            { min: 40, bar: 'bg-amber-500', text: 'text-amber-400', label: 'متوسط' },
+            { min: 0,  bar: 'bg-rose-500', text: 'text-rose-400', label: 'ضعيف' },
+        ];
+
+        const allNeutral = keys.every(key => (statuses[key] ?? 'neutral') === 'neutral');
+
+        ['bg-emerald-500','bg-emerald-400','bg-amber-500','bg-rose-500','bg-slate-700'].forEach(cls => seoScoreBar.classList.remove(cls));
+        ['text-emerald-400','text-emerald-300','text-amber-400','text-rose-400','text-slate-300'].forEach(cls => seoScoreValue.classList.remove(cls));
+
+        if (allNeutral) {
+            seoScoreBar.classList.add('bg-slate-700');
+            seoScoreValue.classList.add('text-slate-300');
+            if (seoScoreLabel) seoScoreLabel.textContent = 'ابدأ بإدخال المحتوى';
+            return;
+        }
+
+        const selected = stateOptions.find(option => score >= option.min) || stateOptions[stateOptions.length - 1];
+
+        seoScoreBar.classList.add(selected.bar);
+        seoScoreValue.classList.add(selected.text);
+
+        if (seoScoreLabel) {
+            seoScoreLabel.textContent = selected.label;
+        }
+    };
+
     const evaluateSEO = (editorInstance) => {
         if (!keywordInput || !titleInput || !seoIndicators.length) return;
         const keyword = (keywordInput.value || '').trim();
@@ -313,7 +389,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const wordMatches = plainText.match(/[\u0600-\u06FF\w’'-]+/g) || [];
         const wordTotal = wordMatches.length;
 
-        console.log('SEO check', { keyword, titleLength: title.length, wordTotal });
+        const statuses = {
+            titleKeyword: 'neutral',
+            introKeyword: 'neutral',
+            titleLength: 'neutral',
+            wordCount: 'neutral',
+            coverImage: 'neutral',
+        };
 
         if (!keyword) {
             setIndicator('titleKeyword', 'neutral');
@@ -321,22 +403,43 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             const titleHasKeyword = title.includes(keyword);
             const introHasKeyword = firstParagraphText.includes(keyword);
-            setIndicator('titleKeyword', titleHasKeyword ? 'good' : 'bad');
-            setIndicator('introKeyword', introHasKeyword ? 'good' : 'bad');
+            statuses.titleKeyword = titleHasKeyword ? 'good' : 'bad';
+            statuses.introKeyword = introHasKeyword ? 'good' : 'bad';
+            setIndicator('titleKeyword', statuses.titleKeyword);
+            setIndicator('introKeyword', statuses.introKeyword);
         }
 
-        if (!title) setIndicator('titleLength', 'neutral');
-        else if (title.length < 30) setIndicator('titleLength', 'bad');
-        else if (title.length <= 70) setIndicator('titleLength', 'good');
-        else setIndicator('titleLength', 'medium');
+        if (!title) {
+            setIndicator('titleLength', 'neutral');
+        } else if (title.length < 30) {
+            statuses.titleLength = 'bad';
+            setIndicator('titleLength', 'bad');
+        } else if (title.length <= 70) {
+            statuses.titleLength = 'good';
+            setIndicator('titleLength', 'good');
+        } else {
+            statuses.titleLength = 'medium';
+            setIndicator('titleLength', 'medium');
+        }
 
-        if (wordTotal === 0) setIndicator('wordCount', 'neutral');
-        else if (wordTotal < 200) setIndicator('wordCount', 'bad');
-        else if (wordTotal < 300) setIndicator('wordCount', 'medium');
-        else setIndicator('wordCount', 'good');
+        if (wordTotal === 0) {
+            setIndicator('wordCount', 'neutral');
+        } else if (wordTotal < 200) {
+            statuses.wordCount = 'bad';
+            setIndicator('wordCount', 'bad');
+        } else if (wordTotal < 300) {
+            statuses.wordCount = 'medium';
+            setIndicator('wordCount', 'medium');
+        } else {
+            statuses.wordCount = 'good';
+            setIndicator('wordCount', 'good');
+        }
 
         const hasCover = (coverInput?.files.length || 0) > 0 || hasInitialCover;
-        setIndicator('coverImage', hasCover ? 'good' : 'bad');
+        statuses.coverImage = hasCover ? 'good' : 'bad';
+        setIndicator('coverImage', statuses.coverImage);
+
+        updateSeoScore(statuses);
     };
 
     const attachSEOAssistant = (instance) => {

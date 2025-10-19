@@ -119,11 +119,23 @@
 
     <link href="{{ asset('assets/css/fonts-local.css') }}" rel="stylesheet">
     @php
-        $faviconSetting = json_decode(app_setting('site.favicon'));
+        $faviconRaw = app_setting('site.favicon');
         $faviconPath = null;
-        if (is_array($faviconSetting) && isset($faviconSetting[0]->download_link)) {
-            $downloadLink = str_replace('\\', '/', $faviconSetting[0]->download_link);
-            $faviconPath = asset('storage/' . ltrim($downloadLink, '/'));
+
+        if (!empty($faviconRaw)) {
+            $downloadLink = null;
+            $decoded = json_decode($faviconRaw, true);
+
+            if (is_array($decoded) && isset($decoded[0]['download_link'])) {
+                $downloadLink = $decoded[0]['download_link'];
+            } elseif (is_string($faviconRaw)) {
+                $downloadLink = $faviconRaw;
+            }
+
+            if (is_string($downloadLink) && $downloadLink !== '') {
+                $downloadLink = str_replace('\\', '/', $downloadLink);
+                $faviconPath = asset('storage/' . ltrim($downloadLink, '/'));
+            }
         }
     @endphp
 
