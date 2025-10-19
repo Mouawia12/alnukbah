@@ -379,12 +379,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const evaluateSEO = (editorInstance) => {
         if (!keywordInput || !titleInput || !seoIndicators.length) return;
         const keyword = (keywordInput.value || '').trim();
+        const normalizedKeyword = keyword.toLowerCase();
         const title = (titleInput.value || '').trim();
+        const normalizedTitle = title.toLowerCase();
         const descriptionHTML = editorInstance.getData() || '';
         const parser = document.createElement('div');
         parser.innerHTML = descriptionHTML;
-        const paragraphs = Array.from(parser.querySelectorAll('p'));
-        const firstParagraphText = (paragraphs[0]?.textContent || '').trim();
+        const firstBlock = parser.querySelector('p, h1, h2, h3, h4, h5, h6, li');
+        const firstBlockText = (firstBlock?.textContent || '').trim();
         const plainText = (parser.textContent || '').trim();
         const wordMatches = plainText.match(/[\u0600-\u06FF\w’'-]+/g) || [];
         const wordTotal = wordMatches.length;
@@ -401,8 +403,8 @@ document.addEventListener('DOMContentLoaded', function() {
             setIndicator('titleKeyword', 'neutral');
             setIndicator('introKeyword', 'neutral');
         } else {
-            const titleHasKeyword = title.includes(keyword);
-            const introHasKeyword = firstParagraphText.includes(keyword);
+            const titleHasKeyword = normalizedTitle.includes(normalizedKeyword);
+            const introHasKeyword = (firstBlockText.toLowerCase()).includes(normalizedKeyword);
             statuses.titleKeyword = titleHasKeyword ? 'good' : 'bad';
             statuses.introKeyword = introHasKeyword ? 'good' : 'bad';
             setIndicator('titleKeyword', statuses.titleKeyword);
