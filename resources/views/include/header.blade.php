@@ -119,12 +119,18 @@
 
     <link href="{{ asset('assets/css/fonts-local.css') }}" rel="stylesheet">
     @php
-        $favicon = json_decode(app_setting('site.favicon'));
-
+        $faviconSetting = json_decode(app_setting('site.favicon'));
+        $faviconPath = null;
+        if (is_array($faviconSetting) && isset($faviconSetting[0]->download_link)) {
+            $downloadLink = str_replace('\\', '/', $faviconSetting[0]->download_link);
+            $faviconPath = asset('storage/' . ltrim($downloadLink, '/'));
+        }
     @endphp
 
-    <link rel="shortcut icon" href="{{ asset('storage/' . $favicon[0]->download_link) }}" type="image/x-icon">
-    <link rel="icon" href="{{ asset('storage/' . $favicon[0]->download_link) }}" type="image/x-icon">
+    @if ($faviconPath)
+        <link rel="shortcut icon" href="{{ $faviconPath }}" type="image/x-icon">
+        <link rel="icon" href="{{ $faviconPath }}" type="image/x-icon">
+    @endif
 
     <!-- Responsive -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

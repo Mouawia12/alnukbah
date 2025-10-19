@@ -23,7 +23,8 @@
         if ($adminFavicon) {
             $decodedFavicon = json_decode($adminFavicon);
             if (is_array($decodedFavicon) && isset($decodedFavicon[0]->download_link)) {
-                $adminFaviconPath = asset('storage/' . ltrim($decodedFavicon[0]->download_link, '/'));
+                $downloadLink = str_replace('\\', '/', $decodedFavicon[0]->download_link);
+                $adminFaviconPath = asset('storage/' . ltrim($downloadLink, '/'));
             }
         }
     @endphp
