@@ -39,9 +39,9 @@ class AdminPasswordController extends Controller
                 ->withInput($request->except('current_password'));
         }
 
-        $user->forceFill([
-            'password' => Hash::make($validated['password']),
-        ])->save();
+        $user->update([
+            'password' => $validated['password'],
+        ]);
 
         return back()->with('ok', '✅ تم تحديث كلمة المرور بنجاح.');
     }

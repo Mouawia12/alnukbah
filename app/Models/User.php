@@ -24,9 +24,22 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($value)
     {
-        if ($value && strlen($value) < 60) {
-            $this->attributes['password'] = Hash::make($value);
+        if (empty($value)) {
+            return;
         }
+
+        $this->attributes['password'] = $this->needsHashing($value)
+            ? Hash::make($value)
+            : $value;
+    }
+
+    protected function needsHashing(string $value): bool
+    {
+        if (strlen($value) !== 60) {
+            return true;
+        }
+
+        return !str_starts_with($value, '$2y$') && !str_starts_with($value, '$argon2');
     }
 
     // علاقة belongsTo بين المستخدم والأدوار
