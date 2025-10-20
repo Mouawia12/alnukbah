@@ -71,24 +71,34 @@
 			</div>
 			<div class="project-detail_gallery">
 				<div class="row clearfix" id="lightgallery">
-					@if ($article->images!=null)
 					@php
-	                  $images=json_decode($article->images);
-                    @endphp
-					
-				
-                     @foreach ($images as $image)
-					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					    $articleImages = $article->images;
+					    if (is_string($articleImages) && $articleImages !== '') {
+					        $decodedImages = json_decode($articleImages, true);
+					        $articleImages = is_array($decodedImages) ? $decodedImages : [];
+					    } elseif (!is_array($articleImages)) {
+					        $articleImages = [];
+					    }
+					@endphp
 
-						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
-						<div class="zoommiddle">
-							<div class="zoomtext"><span class="fa fa-search"></span></div>
-						  </div>
-					</div>
-					 @endforeach
-							
-					 @endif
+					@if (!empty($articleImages))
+						@foreach ($articleImages as $image)
+							@php
+								$imagePath = is_array($image)
+									? ($image['download_link'] ?? $image['path'] ?? reset($image))
+									: (is_object($image) ? ($image->download_link ?? $image->path ?? null) : $image);
+							@endphp
+							@if ($imagePath)
+							<!-- Project Detail Gallery Image -->
+							<div  data-src="{{asset("storage/".str_replace('\\', '/', $imagePath))}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+								<img src="{{asset("storage/".str_replace('\\', '/', $imagePath))}}" class="zoomimage" alt="" />
+								<div class="zoommiddle">
+									<div class="zoomtext"><span class="fa fa-search"></span></div>
+								</div>
+							</div>
+							@endif
+						@endforeach
+					@endif
 				</div>
 			</div>
 
