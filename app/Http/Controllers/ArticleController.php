@@ -49,7 +49,7 @@ class ArticleController extends Controller
             'title'       => $data['title'],
             'description' => $data['description'] ?? null,
             'image'       => $path,
-            'images'      => !empty($galleryPaths) ? json_encode($galleryPaths) : null,
+            'images'      => !empty($galleryPaths) ? $galleryPaths : null,
         ]);
 
         return redirect()->route('admin.articles.index')->with('ok', '✅ تمت إضافة المقال بنجاح');
@@ -90,8 +90,12 @@ class ArticleController extends Controller
         if ($request->hasFile('gallery')) {
 
             // حذف الصور القديمة من التخزين
-            if ($article->images) {
-                $oldGallery = json_decode($article->images, true);
+            $oldGallery = $article->images;
+            if (!is_array($oldGallery)) {
+                $oldGallery = json_decode((string) $oldGallery, true) ?: [];
+            }
+
+            if (!empty($oldGallery)) {
                 foreach ($oldGallery as $oldImg) {
                     if (Storage::disk('public')->exists($oldImg)) {
                         Storage::disk('public')->delete($oldImg);
@@ -107,7 +111,7 @@ class ArticleController extends Controller
                 $newGallery[] = $gPath;
             }
 
-            $article->images = json_encode($newGallery);
+            $article->images = $newGallery;
         }
 
         $article->save();
@@ -123,12 +127,14 @@ class ArticleController extends Controller
         }
 
         // ✅ حذف صور المعرض
-        if ($article->images) {
-            $gallery = json_decode($article->images, true);
-            foreach ($gallery as $img) {
-                if (Storage::disk('public')->exists($img)) {
-                    Storage::disk('public')->delete($img);
-                }
+        $gallery = $article->images;
+        if (!is_array($gallery)) {
+            $gallery = json_decode((string) $gallery, true) ?: [];
+        }
+
+        foreach ($gallery as $img) {
+            if (Storage::disk('public')->exists($img)) {
+                Storage::disk('public')->delete($img);
             }
         }
 
