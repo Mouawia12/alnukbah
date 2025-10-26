@@ -40,7 +40,7 @@ Calibri.ttf
 ***/
 
 h1,h2,h3,h4,h5,h6,p{
-	font-family: din !important;
+        font-family: 'Tajawal', din, sans-serif !important;
 }
 .slider-one{
 	position:relative;

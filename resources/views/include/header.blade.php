@@ -171,7 +171,7 @@
         .main-header .main-menu .navigation>li>a .menu-text {
             font-size: 16px;
             margin: 4px !important;
-            font-family: 'Calibri';
+            font-family: 'Tajawal', 'Calibri', sans-serif;
         }
 
         .main-header .main-menu .navigation>li>ul>li>a {
