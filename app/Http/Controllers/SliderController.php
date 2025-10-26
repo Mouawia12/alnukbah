@@ -20,6 +20,11 @@ class SliderController extends Controller
         return view('admin.sliders.create');
     }
 
+    public function edit(Slider $slider)
+    {
+        return view('admin.sliders.edit', compact('slider'));
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -39,6 +44,33 @@ class SliderController extends Controller
         ]);
 
         return redirect()->route('admin.sliders.index')->with('ok', '✅ تمت إضافة الصورة بنجاح إلى المعرض');
+    }
+
+    public function update(Request $request, Slider $slider)
+    {
+        $data = $request->validate([
+            'title'     => 'nullable|string|max:255',
+            'subtitle'  => 'nullable|string|max:255',
+            'image'     => 'nullable|image|max:4096',
+        ]);
+
+        $slider->title = $data['title'] ?? null;
+        $slider->subtitle = $data['subtitle'] ?? null;
+
+        if ($request->hasFile('image')) {
+            if ($slider->img && Storage::disk('public')->exists($slider->img)) {
+                Storage::disk('public')->delete($slider->img);
+            }
+
+            $folder = 'sliders/' . now()->format('F_Y');
+            $filename = Str::uuid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $path = $request->file('image')->storeAs($folder, $filename, 'public');
+            $slider->img = $path;
+        }
+
+        $slider->save();
+
+        return redirect()->route('admin.sliders.index')->with('ok', '✅ تم تحديث بيانات السلايدر بنجاح');
     }
 
     public function destroy(Slider $slider)

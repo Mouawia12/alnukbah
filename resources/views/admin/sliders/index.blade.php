@@ -24,6 +24,7 @@
                 <p class="text-sm text-slate-100 font-bold">{{ $s->title ?? '— بدون عنوان —' }}</p>
                 <p class="text-xs text-slate-400 mt-1 truncate">{{ $s->subtitle ?? '— بدون عنوان فرعي —' }}</p>
                 <div class="mt-3 flex justify-between items-center">
+                    <a href="{{ route('admin.sliders.edit', $s) }}" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1 rounded text-xs">تعديل</a>
                     <form method="POST" action="{{ route('admin.sliders.destroy', $s) }}">
                         @csrf @method('DELETE')
                         <button onclick="return confirm('هل أنت متأكد من حذف هذه الصورة؟')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs">حذف</button>

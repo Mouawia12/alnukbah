@@ -63,6 +63,8 @@ Route::prefix('admin')
         Route::get('/sliders', [SliderController::class, 'index'])->name('admin.sliders.index');
         Route::get('/sliders/create', [SliderController::class, 'create'])->name('admin.sliders.create');
         Route::post('/sliders', [SliderController::class, 'store'])->name('admin.sliders.store');
+        Route::get('/sliders/{slider}/edit', [SliderController::class, 'edit'])->name('admin.sliders.edit');
+        Route::put('/sliders/{slider}', [SliderController::class, 'update'])->name('admin.sliders.update');
         Route::delete('/sliders/{slider}', [SliderController::class, 'destroy'])->name('admin.sliders.destroy');
 
 

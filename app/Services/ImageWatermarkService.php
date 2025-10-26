@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Support\ArabicGlyphs;
+
 class ImageWatermarkService
 {
     /**
@@ -44,10 +46,11 @@ class ImageWatermarkService
         }
 
         $watermarkText = trim($text ?? config('app.name', 'النخبة')) ?: 'النخبة';
+        $renderText = ArabicGlyphs::shape($watermarkText);
         $fontSize = max(18, (int) round(min($width, $height) * 0.08));
         $margin = max(28, (int) round(min($width, $height) * 0.05));
 
-        $bbox = imagettfbbox($fontSize, 0, $fontPath, $watermarkText);
+        $bbox = imagettfbbox($fontSize, 0, $fontPath, $renderText);
         if (!$bbox) {
             imagedestroy($image);
             return;
@@ -63,10 +66,10 @@ class ImageWatermarkService
         imagesavealpha($image, true);
 
         $shadowColor = imagecolorallocatealpha($image, 0, 0, 0, 90);
-        imagettftext($image, $fontSize, 0, $x + 2, $y + 2, $shadowColor, $fontPath, $watermarkText);
+        imagettftext($image, $fontSize, 0, $x + 2, $y + 2, $shadowColor, $fontPath, $renderText);
 
         $textColor = imagecolorallocatealpha($image, 255, 255, 255, 70);
-        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $fontPath, $watermarkText);
+        imagettftext($image, $fontSize, 0, $x, $y, $textColor, $fontPath, $renderText);
 
         self::saveImageResource($image, $fullPath, $extension);
         imagedestroy($image);
