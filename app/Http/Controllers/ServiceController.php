@@ -180,11 +180,9 @@ class ServiceController extends Controller
             Storage::disk('public')->delete($service->image);
         }
 
-        if ($service->images) {
-            foreach (json_decode($service->images, true) as $img) {
-                if (Storage::disk('public')->exists($img)) {
-                    Storage::disk('public')->delete($img);
-                }
+        foreach ($this->normalizeMedia($service->images) as $img) {
+            if (Storage::disk('public')->exists($img)) {
+                Storage::disk('public')->delete($img);
             }
         }
 
