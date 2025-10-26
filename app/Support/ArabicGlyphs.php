@@ -118,7 +118,9 @@ class ArabicGlyphs
             }
         }
 
-        return implode('', $shaped);
+        $shapedText = implode('', $shaped);
+
+        return self::reorderForRtl($shapedText);
     }
 
     protected static function applyLigatures(string $text): string
@@ -154,5 +156,44 @@ class ArabicGlyphs
         }
 
         return null;
+    }
+
+    protected static function reorderForRtl(string $text): string
+    {
+        $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
+
+        if (!$chars) {
+            return $text;
+        }
+
+        $chars = array_reverse($chars);
+
+        $result = [];
+        $buffer = [];
+
+        $isLtr = static fn (string $char): bool => (bool) preg_match(
+            '/[0-9A-Za-z@#%&\-+_=\/,.:;?!()\[\]{}\x{0660}-\x{0669}\x{06F0}-\x{06F9}]/u',
+            $char
+        );
+
+        foreach ($chars as $char) {
+            if ($isLtr($char)) {
+                $buffer[] = $char;
+                continue;
+            }
+
+            if ($buffer) {
+                $result = array_merge($result, array_reverse($buffer));
+                $buffer = [];
+            }
+
+            $result[] = $char;
+        }
+
+        if ($buffer) {
+            $result = array_merge($result, array_reverse($buffer));
+        }
+
+        return implode('', $result);
     }
 }
