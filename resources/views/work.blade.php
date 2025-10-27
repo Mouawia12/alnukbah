@@ -53,10 +53,10 @@
 	<!-- Page Title -->
     <section class="page-title" style="background-image:url({{asset('assets/images/background/page-title_bg.jpg')}})">
         <div class="auto-container">
-			<h2>{{$work->name}}</h2>
+                        <h2>{{ $work->title }}</h2>
 			<ul class="bread-crumb clearfix">
-				<li><a href="index.html">الرئيسية</a></li>
-			-	<li>التفاصيل </li>
+				<li><a href="/">الرئيسية</a></li>
+				<li>التفاصيل</li>
 			</ul>
         </div>
     </section>
@@ -66,49 +66,54 @@
 	<section class="project-detail">
 		<div class="auto-container">
 		
-			<div class="middle-box">
-				<p>{!!$work->text !!}</p>
+                        <div class="middle-box">
+                                <p>{!! $work->text !!}</p>
 				
 			</div>
 		
 			<div class="project-detail_gallery">
-				<div class="row clearfix" id="lightgallery">
-					@if ($work->images!=null)
-					@php
-	                  $images=json_decode($work->images);
+                <div class="row clearfix" id="lightgallery">
+                    @php
+                        $extraImages = is_array($work->image)
+                            ? array_filter($work->image)
+                            : array_filter(json_decode($work->image ?? '[]', true) ?? []);
+
+                        $galleryImages = [];
+
+                        if (!empty($work->img)) {
+                            $galleryImages[] = ltrim($work->img, '/');
+                        }
+
+                        $galleryImages = array_merge($galleryImages, $extraImages);
                     @endphp
-					
-				                 @if($work->setnumberonimage==1)
 
-                     @foreach ($images as $image)
-					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
-                  <div class="image-container">
-
-						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
-						              <div class="number-overlay">{{app_setting('site.phone')}}</div>
-
-						 </div>
-						<div class="zoommiddle">
-							<div class="zoomtext"><span class="fa fa-search"></span></div>
-						  </div>
-					</div>
-					 @endforeach
-					   @else
-					   		 @foreach ($images as $image)
-					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
-
-						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
-						<div class="zoommiddle">
-							<div class="zoomtext"><span class="fa fa-search"></span></div>
-						  </div>
-					</div>
-					 @endforeach
-					 @endif
-
-					 @endif
-				</div>
+                    @if (!empty($galleryImages))
+                        @if ($work->setnumberonimage == 1)
+                            @foreach ($galleryImages as $image)
+                                <!-- Project Detail Gallery Image -->
+                                <div data-src="{{ asset('storage/' . ltrim($image, '/')) }}" class="item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+                                    <div class="image-container">
+                                        <img src="{{ asset('storage/' . ltrim($image, '/')) }}" class="zoomimage" alt="" />
+                                        <div class="number-overlay">{{ app_setting('site.phone') }}</div>
+                                    </div>
+                                    <div class="zoommiddle">
+                                        <div class="zoomtext"><span class="fa fa-search"></span></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            @foreach ($galleryImages as $image)
+                                <!-- Project Detail Gallery Image -->
+                                <div data-src="{{ asset('storage/' . ltrim($image, '/')) }}" class="item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+                                    <img src="{{ asset('storage/' . ltrim($image, '/')) }}" class="zoomimage" alt="" />
+                                    <div class="zoommiddle">
+                                        <div class="zoomtext"><span class="fa fa-search"></span></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    @endif
+                </div>
 			</div>
 
 			
