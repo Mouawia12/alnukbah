@@ -61,7 +61,7 @@
         {{-- المعاينات --}}
         <div id="extraPreview" class="flex flex-wrap gap-3 mb-4"></div>
 
-        <input type="file" name="image[]" multiple accept="image/*"
+        <input type="file" name="images[]" multiple accept="image/*"
                onchange="previewExtra(event)"
                class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 bg-slate-800/70 border border-slate-700 rounded-xl">
         <p class="text-xs text-slate-500 mt-2">يمكنك اختيار أكثر من صورة</p>
