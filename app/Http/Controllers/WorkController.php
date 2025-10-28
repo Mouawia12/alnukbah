@@ -115,4 +115,37 @@ class WorkController extends Controller
         $work->delete();
         return redirect()->route('admin.works.index')->with('ok', '🗑️ تم حذف العمل بنجاح');
     }
+
+    public function destroyImage($workId, $index)
+    {
+        $work = Work::findOrFail($workId);
+        $images = is_array($work->image) ? $work->image : json_decode($work->image ?? '[]', true);
+        $images = is_array($images) ? $images : [];
+
+        if (filter_var($index, FILTER_VALIDATE_INT) === false || !array_key_exists((int) $index, $images)) {
+            if (request()->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => '⚠️ الصورة المحددة غير موجودة.'], 404);
+            }
+            return back()->with('error', '⚠️ الصورة المحددة غير موجودة.');
+        }
+
+        $targetIndex = (int) $index;
+        $imagePath = $images[$targetIndex] ?? null;
+
+        if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        unset($images[$targetIndex]);
+        $images = array_values(array_filter($images));
+
+        $work->image = !empty($images) ? $images : null;
+        $work->save();
+
+        if (request()->expectsJson()) {
+            return response()->json(['status' => 'ok', 'message' => '🗑️ تم حذف الصورة بنجاح']);
+        }
+
+        return back()->with('ok', '🗑️ تم حذف الصورة بنجاح');
+    }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorkController;
 use App\Http\Controllers\AdminPasswordController;
+use App\Http\Controllers\SubserviceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,6 +57,7 @@ Route::prefix('admin')
         Route::post('/articles', [ArticleController::class, 'store'])->name('admin.articles.store');
         Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('admin.articles.edit');
         Route::put('/articles/{article}', [ArticleController::class, 'update'])->name('admin.articles.update');
+        Route::delete('/articles/{article}/gallery/{index}', [ArticleController::class, 'destroyGalleryImage'])->name('admin.articles.gallery.destroy');
         Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
 
         // 🖼️ معرض الصور
@@ -74,7 +76,17 @@ Route::prefix('admin')
         Route::post('/services', [ServiceController::class, 'store'])->name('admin.services.store');
         Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('admin.services.edit');
         Route::put('/services/{id}', [ServiceController::class, 'update'])->name('admin.services.update');
+        Route::delete('/services/{service}/images/{index}', [ServiceController::class, 'destroyImage'])->name('admin.services.images.destroy');
         Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('admin.services.destroy');
+
+        // 🧩 الخدمات الفرعية
+        Route::get('/subservices', [SubserviceController::class, 'index'])->name('admin.subservices.index');
+        Route::get('/subservices/create', [SubserviceController::class, 'create'])->name('admin.subservices.create');
+        Route::post('/subservices', [SubserviceController::class, 'store'])->name('admin.subservices.store');
+        Route::get('/subservices/{subservice}/edit', [SubserviceController::class, 'edit'])->name('admin.subservices.edit');
+        Route::put('/subservices/{subservice}', [SubserviceController::class, 'update'])->name('admin.subservices.update');
+        Route::delete('/subservices/{subservice}/images/{index}', [SubserviceController::class, 'destroyImage'])->name('admin.subservices.images.destroy');
+        Route::delete('/subservices/{subservice}', [SubserviceController::class, 'destroy'])->name('admin.subservices.destroy');
 
         // 📊 الإحصائيات
         Route::get('/statistics', [StatisticController::class, 'index'])->name('admin.statistics.index');
@@ -108,6 +120,7 @@ Route::prefix('admin')
         Route::post('/works', [WorkController::class, 'store'])->name('admin.works.store');
         Route::get('/works/{id}/edit', [WorkController::class, 'edit'])->name('admin.works.edit');
         Route::put('/works/{id}', [WorkController::class, 'update'])->name('admin.works.update');
+        Route::delete('/works/{work}/images/{index}', [WorkController::class, 'destroyImage'])->name('admin.works.images.destroy');
         Route::delete('/works/{id}', [WorkController::class, 'destroy'])->name('admin.works.destroy');
 
         // 👤 المستخدمون

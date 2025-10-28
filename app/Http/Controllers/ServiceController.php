@@ -189,4 +189,36 @@ class ServiceController extends Controller
         $service->delete();
         return redirect()->route('admin.services.index')->with('ok', '🗑️ تم حذف الخدمة بنجاح');
     }
+
+    public function destroyImage($serviceId, $index)
+    {
+        $service = Service::findOrFail($serviceId);
+        $images = $this->normalizeMedia($service->getRawOriginal('images'));
+
+        if (filter_var($index, FILTER_VALIDATE_INT) === false || !array_key_exists((int) $index, $images)) {
+            if (request()->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => '⚠️ الصورة المحددة غير موجودة.'], 404);
+            }
+            return back()->with('error', '⚠️ الصورة المحددة غير موجودة.');
+        }
+
+        $targetIndex = (int) $index;
+        $imagePath = $images[$targetIndex] ?? null;
+
+        if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        unset($images[$targetIndex]);
+        $images = array_values(array_filter($images));
+
+        $service->images = !empty($images) ? $images : null;
+        $service->save();
+
+        if (request()->expectsJson()) {
+            return response()->json(['status' => 'ok', 'message' => '🗑️ تم حذف الصورة بنجاح']);
+        }
+
+        return back()->with('ok', '🗑️ تم حذف الصورة بنجاح');
+    }
 }

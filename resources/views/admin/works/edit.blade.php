@@ -67,8 +67,20 @@
 
         @if (!empty($extraImages))
             <div class="flex flex-wrap gap-3 mb-4">
-                @foreach ($extraImages as $img)
-                    <img src="{{ asset('storage/' . $img) }}" class="h-24 w-24 rounded-lg border border-slate-700 object-cover">
+                @foreach ($extraImages as $index => $img)
+                    @php $containerId = 'work-image-' . $work->id . '-' . $index; @endphp
+                    <div class="relative group" id="{{ $containerId }}" data-image-wrapper>
+                        <img src="{{ asset('storage/' . $img) }}" class="h-24 w-24 rounded-lg border border-slate-700 object-cover">
+                        <button type="button"
+                                class="px-1.5 py-0.5 text-[11px] rounded bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/30 transition absolute top-1 right-1"
+                                data-delete-image
+                                data-url="{{ route('admin.works.images.destroy', ['work' => $work->id, 'index' => $index]) }}"
+                                data-target="{{ $containerId }}"
+                                data-success-message="🗑️ تم حذف الصورة بنجاح"
+                                data-confirm="هل أنت متأكد من حذف هذه الصورة؟">
+                            حذف
+                        </button>
+                    </div>
                 @endforeach
             </div>
         @else

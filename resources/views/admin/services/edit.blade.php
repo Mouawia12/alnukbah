@@ -77,9 +77,19 @@
         <div>
             <label class="block mb-2 text-sm text-slate-300">الصور الإضافية الحالية</label>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                @foreach ($extraImages as $img)
-                    <div class="relative group">
+                @foreach ($extraImages as $index => $img)
+                    @php $containerId = 'service-image-' . $service->id . '-' . $index; @endphp
+                    <div class="relative group" id="{{ $containerId }}" data-image-wrapper>
                         <img src="{{ asset('storage/' . str_replace('\\', '/', $img)) }}" class="w-full h-32 object-cover rounded-xl border border-slate-700">
+                        <button type="button"
+                                class="px-2 py-1 text-xs rounded-lg bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/30 transition absolute top-2 right-2"
+                                data-delete-image
+                                data-url="{{ route('admin.services.images.destroy', ['service' => $service->id, 'index' => $index]) }}"
+                                data-target="{{ $containerId }}"
+                                data-success-message="🗑️ تم حذف الصورة بنجاح"
+                                data-confirm="هل أنت متأكد من حذف هذه الصورة؟">
+                            حذف
+                        </button>
                     </div>
                 @endforeach
             </div>

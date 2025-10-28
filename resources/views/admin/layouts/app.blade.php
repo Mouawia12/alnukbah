@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'لوحة التحكم')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- ✅ خط Tajawal --}}
     <link href="{{ asset('assets/css/fonts-local.css') }}" rel="stylesheet">
@@ -214,17 +215,24 @@
 
             {{-- 🧱 الخدمات --}}
             <div>
+                @php
+                    $servicesMenuOpen = request()->routeIs('admin.services.*') || request()->routeIs('admin.subservices.*');
+                @endphp
                 <button
-                    class="flex items-center justify-between w-full px-3 py-2 hover:bg-slate-800/50 rounded-lg menu-toggle"
+                    class="flex items-center justify-between w-full px-3 py-2 hover:bg-slate-800/50 rounded-lg menu-toggle {{ $servicesMenuOpen ? 'bg-slate-800/80' : '' }}"
                     data-target="#menu-services">
                     <span class="flex items-center gap-2"><i data-lucide="briefcase" class="w-5 h-5"></i> الخدمات</span>
                     <i data-lucide="chevron-left" class="w-4 h-4"></i>
                 </button>
-                <div id="menu-services" class="hidden mt-2 ps-6 space-y-1">
+                <div id="menu-services" class="{{ $servicesMenuOpen ? '' : 'hidden' }} mt-2 ps-6 space-y-1">
                     <a href="{{ route('admin.services.index') }}"
-                        class="block px-3 py-2 rounded-lg hover:bg-slate-800/40">قائمة الخدمات</a>
+                        class="block px-3 py-2 rounded-lg hover:bg-slate-800/40 {{ request()->routeIs('admin.services.index') || request()->routeIs('admin.services.edit') ? 'bg-slate-800/70' : '' }}">قائمة الخدمات</a>
                     <a href="{{ route('admin.services.create') }}"
-                        class="block px-3 py-2 rounded-lg hover:bg-slate-800/40">إضافة خدمة</a>
+                        class="block px-3 py-2 rounded-lg hover:bg-slate-800/40 {{ request()->routeIs('admin.services.create') ? 'bg-slate-800/70' : '' }}">إضافة خدمة</a>
+                    <a href="{{ route('admin.subservices.index') }}"
+                        class="block px-3 py-2 rounded-lg hover:bg-slate-800/40 {{ request()->routeIs('admin.subservices.index') || request()->routeIs('admin.subservices.edit') ? 'bg-slate-800/70' : '' }}">الخدمات الفرعية</a>
+                    <a href="{{ route('admin.subservices.create') }}"
+                        class="block px-3 py-2 rounded-lg hover:bg-slate-800/40 {{ request()->routeIs('admin.subservices.create') ? 'bg-slate-800/70' : '' }}">إضافة خدمة فرعية</a>
                 </div>
             </div>
 
@@ -409,6 +417,70 @@
             else if (!menu.contains(e.target)) menu.classList.add('hidden');
         });
 
+        // ✅ Ajax image deletion helper
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        let toastTimeout;
+        const toast = document.createElement('div');
+        toast.id = 'ajaxToast';
+        toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-50 px-4 py-3 rounded-lg text-sm font-medium text-white shadow-lg hidden';
+        body.appendChild(toast);
+
+        const showToast = (message, type = 'success') => {
+            toast.textContent = message;
+            toast.classList.remove('hidden', 'bg-emerald-600', 'bg-rose-600');
+            toast.classList.add(type === 'error' ? 'bg-rose-600' : 'bg-emerald-600');
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+            toastTimeout = setTimeout(() => toast.classList.add('hidden'), 2800);
+        };
+
+        document.body.addEventListener('click', async event => {
+            const btn = event.target.closest('[data-delete-image]');
+            if (!btn) return;
+            event.preventDefault();
+
+            const url = btn.dataset.url;
+            const targetId = btn.dataset.target;
+            const container = targetId ? document.getElementById(targetId) : btn.closest('[data-image-wrapper]');
+            const confirmMessage = btn.dataset.confirm || 'هل أنت متأكد من حذف هذه الصورة؟';
+
+            if (!url || !container) {
+                showToast('تعذر تحديد رابط الحذف.', 'error');
+                return;
+            }
+
+            if (!window.confirm(confirmMessage)) {
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('opacity-60', 'cursor-wait');
+
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    const data = await response.json().catch(() => ({}));
+                    throw new Error(data.message || 'تعذر حذف الصورة حالياً.');
+                }
+
+                container.remove();
+                showToast(btn.dataset.successMessage || 'تم حذف الصورة بنجاح', 'success');
+            } catch (error) {
+                showToast(error.message || 'حدث خطأ أثناء حذف الصورة', 'error');
+                btn.disabled = false;
+                btn.classList.remove('opacity-60', 'cursor-wait');
+            }
+        });
+
         if (window.matchMedia('(min-width: 768px)').matches) {
             sidebar?.classList.add('is-open');
         }
@@ -419,4 +491,3 @@
 </body>
 
 </html>
-

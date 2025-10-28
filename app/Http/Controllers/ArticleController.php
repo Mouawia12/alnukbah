@@ -119,6 +119,40 @@ class ArticleController extends Controller
         return redirect()->route('admin.articles.index')->with('ok', '✅ تم تعديل المقال بنجاح');
     }
 
+    public function destroyGalleryImage(Article $article, $index)
+    {
+        $gallery = $article->images;
+        if (!is_array($gallery)) {
+            $gallery = json_decode((string) $gallery, true) ?: [];
+        }
+
+        if (filter_var($index, FILTER_VALIDATE_INT) === false || !array_key_exists((int) $index, $gallery)) {
+            if (request()->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => '⚠️ الصورة المحددة غير موجودة.'], 404);
+            }
+            return back()->with('error', '⚠️ الصورة المحددة غير موجودة.');
+        }
+
+        $targetIndex = (int) $index;
+        $imagePath = $gallery[$targetIndex] ?? null;
+
+        if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
+
+        unset($gallery[$targetIndex]);
+        $gallery = array_values(array_filter($gallery));
+
+        $article->images = !empty($gallery) ? $gallery : null;
+        $article->save();
+
+        if (request()->expectsJson()) {
+            return response()->json(['status' => 'ok', 'message' => '🗑️ تم حذف الصورة من المعرض.' ]);
+        }
+
+        return back()->with('ok', '🗑️ تم حذف الصورة من المعرض.');
+    }
+
     public function destroy(Article $article)
     {
         // ✅ حذف صورة الغلاف

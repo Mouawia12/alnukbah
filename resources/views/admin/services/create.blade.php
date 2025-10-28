@@ -10,6 +10,12 @@
     <a href="{{ route('admin.services.index') }}" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700">الرجوع</a>
 </div>
 
+@if (session('error'))
+    <div class="rounded-lg border border-rose-500/50 bg-rose-500/10 p-4 mb-6 text-rose-200">
+        {{ session('error') }}
+    </div>
+@endif
+
 <form method="POST" action="{{ route('admin.services.store') }}" enctype="multipart/form-data" class="space-y-8 bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
     @csrf
 

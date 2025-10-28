@@ -228,17 +228,29 @@
             <label class="block mb-2 text-sm text-slate-300">معرض الصور الحالي</label>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 @foreach($gallery as $index => $img)
-                    <button type="button"
-                        class="relative group border border-slate-700 rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                        onclick="openGallery({{ $index }})">
-                        <img src="{{ asset('storage/'.$img) }}" class="h-28 w-full object-cover transition duration-200 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M15 3h6v6M21 3l-7 7"/>
-                                <rect x="3" y="3" width="18" height="18" rx="2"/>
-                            </svg>
-                        </div>
-                    </button>
+                    @php $containerId = 'article-image-' . $article->id . '-' . $index; @endphp
+                    <div class="relative group border border-slate-700 rounded-lg overflow-hidden" id="{{ $containerId }}" data-image-wrapper>
+                        <button type="button"
+                            class="relative block w-full h-full focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                            onclick="openGallery({{ $index }})">
+                            <img src="{{ asset('storage/'.$img) }}" class="h-28 w-full object-cover transition duration-200 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M15 3h6v6M21 3l-7 7"/>
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                </svg>
+                            </div>
+                        </button>
+                        <button type="button"
+                                class="px-2 py-1 text-xs rounded-lg bg-rose-600 hover:bg-rose-500 text-white shadow-lg shadow-rose-500/30 transition absolute top-2 right-2"
+                                data-delete-image
+                                data-url="{{ route('admin.articles.gallery.destroy', ['article' => $article->id, 'index' => $index]) }}"
+                                data-target="{{ $containerId }}"
+                                data-success-message="🗑️ تم حذف الصورة من المعرض."
+                                data-confirm="هل أنت متأكد من حذف هذه الصورة؟">
+                            حذف
+                        </button>
+                    </div>
                 @endforeach
             </div>
         </div>
