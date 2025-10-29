@@ -72,7 +72,7 @@
 			</div>
 		
 			<div class="project-detail_gallery">
-                <div class="row clearfix" id="lightgallery">
+                <div class="row clearfix lightgallery-grid" data-lightgallery>
                     @php
                         $extraImages = is_array($work->image)
                             ? array_filter($work->image)

@@ -71,7 +71,7 @@
 				
 			</div>
 			<div class="project-detail_gallery">
-				<div class="row clearfix" id="lightgallery">
+				<div class="row clearfix lightgallery-grid" data-lightgallery>
 					@if ($subservicedetail->images!=null)
 					@php
 	                  $images=json_decode($subservicedetail->images);
@@ -81,7 +81,7 @@
 
                      @foreach ($images as $image)
 					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$image)}}" class="item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
                   <div class="image-container">
 
 						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
@@ -96,7 +96,7 @@
 						 @else	
 						    @foreach ($images as $image)
 					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$image)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$image)}}" class="item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
 
 						<img src="{{asset("storage/".$image)}}" class="zoomimage" alt="" />
 						<div class="zoommiddle">
@@ -115,4 +115,3 @@
 	</section>
 	<!-- End Project Detail -->
 @include('include.footer')
-

@@ -173,24 +173,53 @@
     @endif
 </script>
 
-@unless (app()->environment('local'))
-    <script src="{{ asset('lightgallery.umd.js') }}"></script>
-    <script src="{{ asset('lightgallery.min.js') }}"></script>
+<script src="{{ asset('res/lightgallery.umd.js') }}"></script>
 
-    <!-- lightgallery plugins -->
+<!-- lightgallery plugins -->
 
-    <script src="{{ asset('plugins/thumbnail/lg-thumbnail.umd.js') }}"></script>
-    <script src="{{ asset('plugins/zoom/lg-zoom.umd.js') }}"></script>
-    <script type="text/javascript">
-        lightGallery(document.getElementById('lightgallery'), {
-            selector: '.item',
-            plugins: [lgZoom, lgThumbnail],
-            speed: 500,
-            licenseKey: 'your_license_key'
+<script src="{{ asset('plugins/thumbnail/lg-thumbnail.umd.js') }}"></script>
+<script src="{{ asset('plugins/zoom/lg-zoom.umd.js') }}"></script>
+<script type="text/javascript">
+    (function () {
+        const initLightGalleries = () => {
+            if (typeof lightGallery !== 'function') {
+                return;
+            }
 
-        });
-    </script>
-@endunless
+            const galleries = document.querySelectorAll('[data-lightgallery]');
+            if (!galleries.length) {
+                return;
+            }
+
+            galleries.forEach(function (gallery) {
+                if (gallery.dataset.lgInitialized === '1') {
+                    return;
+                }
+
+                lightGallery(gallery, {
+                    selector: '.item',
+                    plugins: typeof lgZoom !== 'undefined' && typeof lgThumbnail !== 'undefined' ? [lgZoom, lgThumbnail] : [],
+                    speed: 500,
+                    licenseKey: '0000-0000-000-0000',
+                });
+
+                gallery.dataset.lgInitialized = '1';
+            });
+        };
+
+        if (typeof lightGallery !== 'function') {
+            return;
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLightGalleries, { once: true });
+        } else {
+            initLightGalleries();
+        }
+
+        document.addEventListener('alnukbah:gallery:update', initLightGalleries);
+    })();
+</script>
 <div class="icon-float icon-float-call">
     <a class="float" href="tel:0508073635" target="_blank" data-kmt="1">
         <i class="fa fa-phone phoneicon"></i>

@@ -94,7 +94,7 @@
 				@endif
 				</div>
 			<div class="project-detail_gallery">
-				<div class="row clearfix" id="lightgallery">
+				<div class="row clearfix lightgallery-grid" data-lightgallery>
 					@php
 					    $galleryImages = $servicedetail->images;
 					    if (is_string($galleryImages) && $galleryImages !== '') {
@@ -115,7 +115,7 @@
                     @if ($imagePath)
 					<!-- Project Detail Gallery Image -->
 					
-					<div  data-src="{{asset("storage/".$imagePath)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$imagePath)}}" class="item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
                         <div class="image-container">
 						<img src="{{asset("storage/".$imagePath)}}" class="zoomimage" alt="" />
 			       			 <div class="number-overlay">{{app_setting('site.phone')}}</div>
@@ -136,7 +136,7 @@
                     @endphp
                     @if ($imagePath)
 					<!-- Project Detail Gallery Image -->
-					<div  data-src="{{asset("storage/".$imagePath)}}" class=" item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
+					<div  data-src="{{asset("storage/".$imagePath)}}" class="item project-detail_gallery-image skewElem col-lg-6 col-md-6 col-sm-6">
 
 						<img src="{{asset("storage/".$imagePath)}}" class="zoomimage" alt="" />
 						<div class="zoommiddle">
